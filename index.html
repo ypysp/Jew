@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品展示表格 - 优化图片弹窗设计</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf7 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .dashboard {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .dashboard-header {
+            padding: 20px 25px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border: none;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.9);
+            width: 250px;
+            box-shadow: 极 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+            width: 300px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            color: #7f8c8d;
+        }
+        
+        .items-per-page {
+            display:极 flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .items-per-page select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background-color: white;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            padding: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 900px;
+        }
+        
+        thead th {
+            background-color: #f8f9fa;
+            padding: 18px 15px;
+            text-align: left;
+            color: #2c3e50;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #3498db;
+            cursor: pointer;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        thead th:first-child {
+            width: 100px;
+        }
+        
+        thead th:nth-child(2) {
+            width: 150px;
+        }
+        
+        thead th:hover {
+            background-color: #edf5fa;
+        }
+        
+        thead th.sort-asc:after {
+            content: "▴";
+            position: absolute;
+            right: 10px;
+            color: #3498db;
+        }
+        
+        thead th.sort-desc:after {
+            content: "▾";
+            position: absolute;
+            right: 10px;
+            color: #3498db;
+        }
+        
+        tbody tr {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f9fbfd;
+        }
+        
+        tbody tr:hover {
+            background-color: #e8f4fe;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        tbody td {
+            padding: 16px 15px;
+            color: #495057;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+        
+        /* 图片容器 */
+        .image-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin: 0 auto;
+            cursor: zoom-in;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .image-container:hover {
+            transform: scale(1.05);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .magnify-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(52, 152, 219, 0.7);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .image-container:hover .magnify-icon {
+            background: #3498db;
+            transform: scale(1.2);
+        }
+        
+        .status {
+            padding: 7px 14px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .status.available {
+            background-color: #e8f7ef;
+            color: #27ae60;
+        }
+        
+        .status.out-of-stock {
+            background-color: #fdeaea;
+            color: #e74c3c;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 25px;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+            background-color: #f8fafc;
+        }
+        
+        .pagination button {
+            padding: 8px 18px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #3498db;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .pagination button:not([disabled]):hover {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+        
+        .pagination button[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .page-number {
+            min-width: 40px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .page-number:hover:not(.active) {
+            background-color: #e1f0fa;
+        }
+        
+        .page-number.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+        }
+        
+        .page-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+            justify-content: center;
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+        
+        .product-detail {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        
+        .product-highlight {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        @media (max-width: 1200px) {
+            .image-container {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .image-container {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .magnify-icon {
+                width: 25px;
+                height: 25px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .controls {
+                width: 100%;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .items-per-page {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .image-container {
+                width: 70px;
+                height: 70px;
+            }
+        }
+        
+        /* 图片模态框样式 - 优化设计 */
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.92);
+        }
+        
+        .modal-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .modal-content-container {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .modal-content {
+            max-width: 100%;
+            max-height: calc(90vh - 180px); /* 减去标题和按钮高度 */
+            object-fit: contain;
+            animation-name: zoom;
+            animation-duration: 0.3s;
+            transform-origin: center center;
+            transition: transform 0.3s ease;
+            border-radius: 8px;
+        }
+        
+        @keyframes zoom {
+            from {transform: scale(0.9); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+        
+        #caption {
+            text-align: center;
+            color: #fff;
+            padding: 15px 0 10px;
+            font-size: 1.4rem;
+            font-weight: 500;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .modal-controls {
+            position: absolute;
+            bottom: 10px; /* 按钮离底部100px */
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 0;
+            background: rgba(0,0,0,0.0);
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        
+        .modal-btn {
+            background-color: rgba(52, 152, 219, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            bottom: 100px;
+        }
+        
+        .modal-btn:hover {
+            background-color: #3498db;
+            transform: translateY(-3px);
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 28px;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-nav:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        #prevBtn {
+            left: 20px;
+        }
+        
+        #nextBtn {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-search-plus"></i> 商品展示表格</h1>
+            <div class="subtitle">优化图片弹窗设计 | 点击图片查看大图</div>
+        </header>
+        
+        <section class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-images"></i> 商品库存列表</h2>
+                <div class="controls">
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" placeholder="搜索商品...">
+                    </div>
+                    <div class="items-per-page">
+                        <label for="itemsPerPage">每页显示：</label>
+                        <select id="itemsPerPage">
+                            <option value="5">5 条</option>
+                            <option value="10" selected>10 条</option>
+                            <option value="20">20 条</option>
+                            <option value="50">50 条</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <极div class="table-container">
+                <table id="productTable">
+                    <thead>
+                        <tr>
+                            <th data-sort="id">ID <i class="fas fa-sort"></i></th>
+                            <th>产品图片</th>
+                            <th data-sort="name">产品名称 <i class="fas fa-sort"></i></th>
+                            <th data-sort="category">类别 <i class="fas fa-sort"></i></th>
+                            <th data-sort="price">价格 <i class="fas fa-sort"></i></th>
+                            <th data-sort="quantity">库存 <i class="fas fa-sort"></i></th>
+                            <th data-sort="status">状态 <i class="fas fa-sort"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Table rows will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <button id="firstPage" title="首页"><i class="fas fa-step-backward"></i></button>
+                <button id="prevPage" title="上一页"><i class="fas fa-chevron-left"></i></button>
+                
+                <!-- Page numbers will be generated here -->
+                
+                <button id="nextPage" title="下一页"><i class="fas fa-chevron-right"></i></button>
+                <button id="lastPage" title="末页"><i class="fas fa-step-forward"></i></button>
+                
+                <div class="page-info">
+                    显示 <span id="startRow">1</span> - <span id="endRow">10</span> 条，共 <span id="totalRows">120</span> 条记录
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 图片模态框 -->
+    <div id="imageModal">
+        <span class="close">&times;</span>
+        <button class="modal-nav" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+        <button class="modal-nav" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        
+        <div class="modal-wrapper">
+            <div class="modal-content-container">
+                <img class="modal-content" id="modalImage">
+                <div id="caption"></div>
+                <div class="modal-controls">
+                    <button class="modal-btn" id="zoomIn"><i class="fas fa-search-plus"></i> 放大</button>
+                    <button class="modal-btn" id="zoomOut"><i class="fas fa-search-minus"></i> 缩小</button>
+                    <button class="modal-btn" id="rotateBtn"><i class="fas fa-sync-alt"></i> 旋转</button>
+                    <button class="modal-btn" id="resetBtn"><i class="fas fa-redo"></i> 重置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟数据
+        const products = [
+            {id: 101, name: "智能手机 X1", category: "手机", price: 2999, quantity: 45, status: "available", 
+             image: "https://img.freepik.com/free-photo/new-smartphone-black-background-mock-up_53876-97389.jpg?w=900",
+             description: "高端旗舰手机，搭载最新处理器和AMOLED屏幕，支持5G网络"},
+            
+            {id: 102, name: "笔记本电脑 Pro", category: "电脑", price: 7999, quantity: 18, status: "available", 
+             image: "https://img.freepik.com/free-photo/laptop-mockup-concept_23-2148621157.jpg?w=900",
+             description: "轻薄设计，高性能处理器，超长续航时间，办公娱乐两相宜"},
+            
+            {id: 103, name: "蓝牙耳机 Air", category: "耳机", price: 899, quantity: 0, status: "out-of-stock", 
+             image: "https://img.freepik.com/free-photo/wireless-earbuds_53876-96805.jpg?w=900",
+             description: "真无线设计，主动降噪功能，高保真音质，24小时续航"},
+            
+            {id: 104, name: "智能手表 3", category: "可穿戴", price: 1299, quantity: 32, status: "available", 
+             image: "https://img.freepik.com/free-photo/smart-watch_53876-94783.jpg?w=900",
+             description: "全面健康监测，50米防水，支持运动模式识别，30天待机"},
+            
+            {id: 105, name: "平板电脑 Lite", category: "平板", price: 2299, quantity: 24, status: "available", 
+             image: "https://img.freepik.com/free-photo/white-tablet-screen-mock-up-concept_538极76-89852.jpg?w=900",
+             description: "10英寸高分辨率屏幕，四扬声器环绕音效，超大电池容量"},
+            
+            {id: 106, name: "游戏主机 Elite", category: "游戏", price: 4599, quantity: 8, status: "available", 
+             image: "https://img.freepik.com/free-photo/gaming-console_53876-97308.jpg?w=900",
+             description: "支持4K分辨率，光线追踪技术，1TB固态硬盘，超强性能"},
+            
+            {id: 107, name: "数码相机 Pro", category: "相机", price: 5899, quantity: 12, status: "available", 
+             image: "https://img.freepik.com/free-photo/digital-camera_1409-8890.jpg?w=900",
+             description: "2400万像素，4K视频拍摄，五轴防抖，专业级摄影体验"},
+            
+            {id: 108, name: "无线鼠标", category: "配件", price: 159, quantity: 76, status: "available", 
+             image: "https://img.freepik.com/free-psd/wireless-computer-mouse-isolated-transparent-background_191095-9015.jpg?w=900",
+             description: "人体工学设计，2.4GHz无线连接，可编程按键，超长续航"},
+            
+            {id: 109, name: "机械键盘 RGB", category: "配件", price: 599, quantity: 21, status: "available", 
+             image: "https://img.freepik.com/free-photo/keyboard-computer-peripherals-close-up-view_1418-1480.jpg?w=900",
+             description: "Cherry MX轴体，RGB背光，全键无冲，双色注塑键帽"},
+            
+            {id: 110, name: "4K显示器", category: "显示器", price: 2899, quantity: 14, status: "available", 
+             image: "https://img.freepik.com/free-photo/wide-computer-monitor-displaying-technology-interface_53876-94884.jpg?w=900",
+             description: "27英寸4K HDR显示屏，99% sRGB色域，多接口支持"},
+            
+            {id: 111, name: "路由器 AX6000", category: "网络", price: 899, quantity: 9, status: "available", 
+             image: "https://img.freepik.com/free-psd/wireless-router-mock-up_1310-1528.jpg?w=900",
+             description: "WiFi 6技术，8数据流设计，OFDMA和MU-MIMO技术"},
+            
+            {id: 112, name: "外置硬盘 2TB", category: "存储", price: 699, quantity: 27, status: "available", 
+             image: "https://img.freepik.com/free-photo/external-hard-disk_53876-97381.jpg?w=900",
+             description: "USB 3.2接口，超快传输速度，防震设计，3年质保"},
+            
+            {id: 113, name: "便携投影仪", category: "显示", price: 1899, quantity: 0, status: "out-of-stock", 
+             image: "https://img.freepik.com/free-psd/portable-projector-mock-up_1310-1964.jpg?w=900",
+             description: "微型设计，支持1080P，内置音响，1000流明亮度"},
+            
+            {id: 114, name: "蓝牙音箱", category: "音频", price: 399, quantity: 41, status: "available", 
+             image: "https://img.freepik.com/free-photo/bluetooth-speaker_53876-89035.jpg?w=900",
+             description: "360°环绕音效，IPX7防水，20小时续航，支持立体声配对"},
+            
+            {id: 115, name: "电子阅读器", category: "阅读", price: 999, quantity: 17, status: "available", 
+             image: "https://img.freepik.com/free-photo/e-reader_53876-94814.jpg?w=900",
+             description: "7英寸电子墨水屏，32GB存储，24级背光调节，轻至180g"},
+            
+            {id: 116, name: "游戏手柄", category: "游戏", price: 499, quantity: 6, status: "available", 
+             image: "https://img.freepik.com/free-photo/gaming-gear-joystick_53876-94826.jpg?w=900",
+             description: "无线连接，震动反馈，可编程按键，人体工学设计"},
+            
+            {id: 117, name: "VR眼镜", category: "可穿戴", price: 2799, quantity: 3, status: "available", 
+             image: "https://img.freepik.com/free-psd/virtual-reality-headset-mock-up_1310-1779.jpg?w=900",
+             description: "6DOF追踪，110°视场角，高分辨率显示屏，佩戴舒适"},
+            
+            {id: 118, name: "无人机 Mini", category: "摄影", price: 3499, quantity: 7, status: "available", 
+             image: "https://img.freepik.com/free-photo/drone-with-camera_53876-97388.jpg?w=900",
+             description: "4K高清摄影，3轴云台稳定，31分钟续航，智能飞行模式"},
+            
+            {id: 119, name: "打印机 Pro", category: "办公", price: 1899, quantity: 15, status: "available", 
+             image: "https://img.freepik.com/free-photo/printer_1203-8501.jpg?w=900",
+             description: "无线打印，自动双面，彩色喷墨，支持多种纸张类型"},
+            
+            {id: 120, name: "扫描仪", category: "办公", price: 1099, quantity: 0, status: "out-of-stock", 
+             image: "https://img.freepik.com/free-psd/flat-scanner-mock-up_23-2148932946.jpg?w=900",
+             description: "高分辨率扫描，一键操作，自动文档进纸，OCR文字识别"}
+        ];
+        
+        // 当前状态
+        let currentPage = 1;
+        let itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
+        let sortField = 'id';
+        let sortDirection = 'asc';
+        let currentProducts = [...products];
+        let currentImageIndex = 0;
+        let currentProduct = null;
+        
+        // DOM元素
+        const tableBody = document.getElementById('tableBody');
+        const itemsPerPageSelect = document.getElementById('itemsPerPage');
+        const startRowEl = document.getElementById('startRow');
+        const endRowEl = document.getElementById('endRow');
+        const totalRowsEl = document.getElementById('totalRows');
+        const searchInput = document.getElementById('searchInput');
+        
+        // 图片模态框相关元素
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const modalCaption = document.getElementById('caption');
+        const closeModal = document.getElementsByClassName('close')[0];
+        const zoomInBtn = document.getElementById('zoomIn');
+        const zoomOutBtn = document.getElementById('zoomOut');
+        const rotateBtn = document.getElementById('rotateBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // 图片缩放状态
+        let currentScale = 1;
+        let currentRotation = 0;
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            totalRowsEl.textContent = products.length;
+            renderTable();
+            setupEventListeners();
+        });
+        
+        function setupEventListeners() {
+            // 每页显示数量变化
+            itemsPerPageSelect.addEventListener('change', function() {
+                itemsPerPage = parseInt(this.value);
+                currentPage = 1;
+                renderTable();
+            });
+            
+            // 分页按钮
+            document.getElementById('firstPage').addEventListener('click', function() {
+                currentPage = 1;
+                renderTable();
+            });
+            
+            document.getElementById('prevPage').addEventListener('click', function() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            document.getElementById('nextPage').addEventListener('click', function() {
+                const totalPages = Math.ceil(currentProducts.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            document.getElementById('lastPage').addEventListener('click', function() {
+                currentPage = Math.ceil(currentProducts.length / itemsPerPage);
+                renderTable();
+            });
+            
+            // 搜索
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                if (searchTerm === '') {
+                    currentProducts = [...products];
+                } else {
+                    currentProducts = products.filter(product => {
+                        return (
+                            product.name.toLowerCase().includes(searchTerm) ||
+                            product.category.toLowerCase().includes(searchTerm) ||
+                            product.status.toLowerCase().includes(searchTerm) ||
+                            product.id.toString().includes(searchTerm) ||
+                            product.description.toLowerCase().includes(searchTerm)
+                        );
+                    });
+                }
+                
+                currentPage = 1;
+                totalRowsEl.textContent = currentProducts.length;
+                renderTable();
+            });
+            
+            // 表格排序
+            document.querySelectorAll('th[data-sort]').forEach(header => {
+                header.addEventListener('click', function() {
+                    const field = this.dataset.sort;
+                    
+                    if (field === 'image') return;
+                    
+                    if (sortField === field) {
+                        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        sortField = field;
+                        sortDirection = 'asc';
+                    }
+                    
+                    // 更新排序指示器
+                    document.querySelectorAll('th').forEach(th => {
+                        th.classList.remove('sort-asc', 'sort-desc');
+                    });
+                    
+                    this.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                    
+                    renderTable();
+                });
+            });
+            
+            // 模态框关闭按钮
+            closeModal.addEventListener('click', function() {
+                closeImageModal();
+            });
+            
+            // 点击模态框外部也关闭
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeImageModal();
+                }
+            });
+            
+            // 放大按钮
+            zoomInBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentScale += 0.2;
+                updateImageTransform();
+            });
+            
+            // 缩小按钮
+            zoomOutBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (currentScale > 0.4) {
+                    currentScale -= 0.2;
+                    updateImageTransform();
+                }
+            });
+            
+            // 旋转按钮
+            rotateBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentRotation += 90;
+                if (currentRotation >= 360) currentRotation = 0;
+                updateImageTransform();
+            });
+            
+            // 重置按钮
+            resetBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                currentScale = 1;
+                currentRotation = 0;
+                updateImageTransform();
+            });
+            
+            // 上一张按钮
+            prevBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navigateImage(-1);
+            });
+            
+            // 下一张按钮
+            nextBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navigateImage(1);
+            });
+            
+            // 键盘事件
+            document.addEventListener('keydown', function(e) {
+                if (modal.style.display === 'block') {
+                    // 左右箭头切换图片
+                    if (e.key === 'ArrowLeft') {
+                        navigateImage(-1);
+                    } else if (e.key === 'ArrowRight') {
+                        navigateImage(1);
+                    }
+                    // ESC键关闭模态框
+                    else if (e.key === 'Escape') {
+                        closeImageModal();
+                    }
+                }
+            });
+        }
+        
+        function setupImageClickEvents() {
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('product-img') || 
+                    e.target.classList.contains('image-container') ||
+                    e.target.classList.contains('magnify-icon')) {
+                    
+                    const img = e.target.closest('.image-container').querySelector('.product-img');
+                    const productId = img.closest('tr').cells[0].textContent;
+                    const product = products.find(p => p.id === parseInt(productId));
+                    
+                    if (product) {
+                        openImageModal(product);
+                    }
+                }
+            });
+        }
+        
+        function openImageModal(product) {
+            modalImg.src = product.image;
+            modalCaption.textContent = `${product.name} - ${product.category}`;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 阻止背景滚动
+            
+            // 重置缩放和旋转
+            currentScale = 1;
+            currentRotation = 0;
+            updateImageTransform();
+            
+            // 设置当前产品
+            currentProduct = product;
+            
+            // 查找当前产品在列表中的位置
+            currentImageIndex = products.findIndex(p => p.id === product.id);
+        }
+        
+        function navigateImage(direction) {
+            currentImageIndex += direction;
+            
+            // 循环浏览图片
+            if (currentImageIndex < 0) {
+                currentImageIndex = products.length - 1;
+            } else if (currentImageIndex >= products.length) {
+                currentImageIndex = 0;
+            }
+            
+            const product = products[currentImageIndex];
+            modalImg.src = product.image;
+            modalCaption.textContent = `${product.name} - ${product.category}`;
+            
+            // 重置缩放和旋转
+            currentScale = 1;
+            currentRotation = 0;
+            updateImageTransform();
+        }
+        
+        function closeImageModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // 恢复背景滚动
+        }
+        
+        function updateImageTransform() {
+            modalImg.style.transform = `scale(${currentScale}) rotate(${currentRotation}deg)`;
+        }
+        
+        function renderTable() {
+            // 应用排序
+            const sortedProducts = [...currentProducts].sort((a, b) => {
+                let valueA, valueB;
+                
+                if (sortField === 'name' || sortField === 'category' || sortField === 'status') {
+                    valueA = a[sortField].toLowerCase();
+                    valueB = b[sortField].toLowerCase();
+                } else {
+                    valueA = a[sortField];
+                    valueB = b[sortField];
+                }
+                
+                if (valueA < valueB) return sortDirection === 'asc' ? -1 : 1;
+                if (valueA > valueB) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // 计算分页
+            const totalItems = sortedProducts.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            
+            if (currentPage > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
+            
+            // 更新显示信息
+            startRowEl.textContent = totalItems === 0 ? 0 : startIndex + 1;
+            endRowEl.textContent = endIndex;
+            totalRowsEl.textContent = totalItems;
+            
+            // 渲染表格行
+            tableBody.innerHTML = '';
+            
+            if (paginatedProducts.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #7f8c8d;">没有找到匹配的产品数据</td></tr>`;
+                renderPagination(0);
+                return;
+            }
+            
+            paginatedProducts.forEach(product => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${product.id}</td>
+                    <td>
+                        <div class="image-container">
+                            <img src="${product.image}" alt="${product.name}" class="product-img">
+                            <div class="magnify-icon">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>${product.name}</strong>
+                        <div class="product-detail">${product.description.substring(0, 40)}...</div>
+                    </td>
+                    <td>${product.category}</td>
+                    <td><span class="product-highlight">¥${product.price.toLocaleString()}</span></td>
+                    <td>${product.quantity}</td>
+                    <td><span class="status ${product.status}">${product.status === 'available' ? '有货' : '缺货'}</span></td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // 设置图片点击事件
+            setupImageClickEvents();
+            
+            // 渲染分页控件
+            renderPagination(totalPages);
+        }
+        
+        function renderPagination(totalPages) {
+            // 先清除现有的页码按钮
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+            const existingPageButtons = document.querySelectorAll('.page-number');
+            
+            existingPageButtons.forEach(btn => {
+                btn.remove();
+            });
+            
+            // 如果没有数据则不渲染分页按钮
+            if (totalPages === 0) {
+                return;
+            }
+            
+            // 添加页码按钮
+            const maxVisiblePages = 5; // 最多显示多少个页码按钮
+            let startPage, endPage;
+            
+            if (totalPages <= maxVisiblePages) {
+                startPage = 1;
+                endPage = totalPages;
+            } else {
+                // 计算起始和结束页码
+                const maxVisibleBeforeAfter = Math.floor(maxVisiblePages / 2);
+                startPage = Math.max(currentPage - maxVisibleBeforeAfter, 1);
+                endPage = startPage + maxVisiblePages - 1;
+                
+                if (endPage > totalPages) {
+                    endPage = totalPages;
+                    startPage = endPage - maxVisiblePages + 1;
+                }
+            }
+            
+            // 创建页码按钮
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = 'page-number';
+                pageBtn.textContent = i;
+                pageBtn.dataset.page = i;
+                
+                if (i === currentPage) {
+                    pageBtn.classList.add('active');
+                }
+                
+                pageBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    currentPage = parseInt(this.dataset.page);
+                    renderTable();
+                });
+                
+                nextBtn.insertAdjacentElement('beforebegin', pageBtn);
+            }
+            
+            // 更新按钮状态
+            document.getElementById('firstPage').disabled = currentPage === 1;
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+            document.getElementById('lastPage').disabled = currentPage === totalPages;
+        }
+    </script>
+</body>
+</html>
