@@ -4,22 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品展示表格 - 带居中放大图片功能</title>
+    <title>商品展示表格 - 带居中放大图片功能 (优化版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Noto Sans SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4ecf7 100%);
             min-height: 100vh;
-            padding: 40px 20px;
-            color: #333;
-            position: relative;
+            padding: 30px 15px;
+            color: #2c3e50;
+            line-height: 1.6;
         }
 
         .container {
@@ -34,11 +36,12 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             color: #2c3e50;
             margin-bottom: 10px;
             position: relative;
             display: inline-block;
+            font-weight: 700;
         }
 
         h1:after {
@@ -63,6 +66,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         .dashboard-header {
@@ -90,11 +94,12 @@
         }
 
         .search-box input {
-            padding: 10px 15px 10px 40px;
+            padding: 12px 15px 12px 45px;
             border: none;
             border-radius: 50px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.92);
             width: 250px;
+            font-size: 1rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
@@ -107,8 +112,9 @@
 
         .search-icon {
             position: absolute;
-            left: 15px;
-            color: #7f8c8d;
+            left: 18px;
+            color: #3498db;
+            font-size: 18px;
         }
 
         .items-per-page {
@@ -118,10 +124,17 @@
         }
 
         .items-per-page select {
-            padding: 8px 15px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
-            border-radius: 6px;
+            border-radius: 8px;
             background-color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .items-per-page select:hover {
+            border-color: #3498db;
         }
 
         .table-container {
@@ -150,6 +163,7 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            transition: background-color 0.3s;
         }
 
         thead th:first-child {
@@ -161,7 +175,7 @@
         }
 
         thead th:hover {
-            background-color: #edf5fa;
+            background-color: #e1f0fa;
         }
 
         thead th.sort-asc:after {
@@ -179,7 +193,7 @@
         }
 
         tbody tr {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         tbody tr:nth-child(even) {
@@ -188,18 +202,17 @@
 
         tbody tr:hover {
             background-color: #e8f4fe;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
         }
 
         tbody td {
-            padding: 16px 15px;
+            padding: 18px 15px;
             color: #495057;
             border-bottom: 1px solid #eee;
             vertical-align: middle;
         }
 
-        /* 图片容器 */
+        /* 图片容器优化 */
         .image-container {
             position: relative;
             width: 120px;
@@ -207,60 +220,78 @@
             overflow: hidden;
             border-radius: 10px;
             margin: 0 auto;
-            cursor: zoom-in;
+            cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .image-container:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         .product-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
         .magnify-icon {
             position: absolute;
             bottom: 10px;
             right: 10px;
-            background: rgba(52, 152, 219, 0.7);
+            background: rgba(52, 152, 219, 0.85);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 16px;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .image-container:hover .magnify-icon {
-            background: #3498db;
-            transform: scale(1.2);
+        .magnify-icon:hover {
+            background: #2980b9;
+            transform: scale(1.15);
         }
 
         .status {
-            padding: 7px 14px;
+            padding: 8px 16px;
             border-radius: 50px;
             font-weight: 500;
             font-size: 0.85rem;
             display: inline-block;
-            min-width: 80px;
+            min-width: 85px;
             text-align: center;
         }
 
         .status.available {
             background-color: #e8f7ef;
             color: #27ae60;
+            box-shadow: inset 0 0 0 2px #27ae60;
         }
 
         .status.out-of-stock {
             background-color: #fdeaea;
             color: #e74c3c;
+            box-shadow: inset 0 0 0 2px #e74c3c;
+        }
+
+        .product-detail {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .product-highlight {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.1rem;
         }
 
         .pagination {
@@ -274,26 +305,27 @@
         }
 
         .pagination button {
-            padding: 8px 18px;
+            padding: 10px 20px;
             background-color: white;
             border: 1px solid #ddd;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
             color: #3498db;
-            font-weight: 500;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            gap: 8px;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
         }
 
         .pagination button:not([disabled]):hover {
             background-color: #3498db;
             color: white;
             border-color: #3498db;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
         }
 
         .pagination button[disabled] {
@@ -302,13 +334,14 @@
         }
 
         .page-number {
-            min-width: 40px;
-            min-height: 40px;
+            min-width: 44px;
+            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             transition: all 0.3s ease;
+            font-size: 1rem;
         }
 
         .page-number:hover:not(.active) {
@@ -319,8 +352,8 @@
             background-color: #3498db;
             color: white;
             border-color: #3498db;
-            font-weight: 600;
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.25);
         }
 
         .page-info {
@@ -330,77 +363,165 @@
             margin-top: 15px;
             width: 100%;
             justify-content: center;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #7f8c8d;
         }
 
-        .product-detail {
+        /* 移动端卡片视图优化 */
+        .mobile-product-list {
+            display: none;
+            padding: 15px;
+        }
+        
+        .mobile-product-card {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            padding: 20px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .mobile-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .mobile-image-container {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .mobile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mobile-image-container:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-magnify-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(52, 152, 219, 0.85);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .mobile-card-info {
+            flex: 1;
+        }
+
+        .mobile-card-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .mobile-card-id {
             font-size: 0.9rem;
             color: #7f8c8d;
-            margin-top: 5px;
         }
 
-        .product-highlight {
+        .mobile-card-body {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mobile-card-row {
+            display: flex;
+            flex-direction: column;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .mobile-card-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .mobile-card-label i {
+            color: #3498db;
+        }
+
+        .mobile-card-value {
             font-weight: 600;
+            font-size: 1.05rem;
             color: #2c3e50;
         }
 
-        @media (max-width: 1200px) {
-            .image-container {
-                width: 100px;
-                height: 100px;
-            }
+        .mobile-card-description {
+            font-size: 0.92rem;
+            color: #7f8c8d;
+            line-height: 1.5;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #eee;
+        }
+        
+        .mobile-status-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+        
+        .mobile-status-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
         }
 
-        @media (max-width: 992px) {
-            .image-container {
-                width: 80px;
-                height: 80px;
-            }
-
-            .magnify-icon {
-                width: 25px;
-                height: 25px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .controls {
-                width: 100%;
-            }
-
-            .search-box input {
-                width: 100%;
-            }
-
-            .items-per-page {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .image-container {
-                width: 70px;
-                height: 70px;
-            }
-        }
-
-        /* 图片模态框样式 - 居中显示 */
+        /* 图片模态框优化 */
         #imageModal {
             display: none;
             position: fixed;
-            z-index: 1000;
+            z-index: 10000;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(5px);
         }
 
         .modal-wrapper {
@@ -408,12 +529,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 15px;
         }
 
         .modal-content-container {
             position: relative;
-            max-width: 90%;
+            max-width: 95%;
             max-height: 90vh;
             display: flex;
             flex-direction: column;
@@ -422,20 +543,21 @@
 
         .modal-content {
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 70vh;
             object-fit: contain;
             animation-name: zoom;
-            animation-duration: 0.3s;
+            animation-duration: 0.4s;
             transform-origin: center center;
             transition: transform 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
         @keyframes zoom {
             from {
-                transform: scale(0.9);
+                transform: scale(0.8);
                 opacity: 0;
             }
-
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -445,29 +567,31 @@
         #caption {
             text-align: center;
             color: #fff;
-            padding: 15px 0;
-            font-size: 1.2rem;
-            background: rgba(0, 0, 0, 0.7);
+            padding: 18px 0;
+            font-size: 1.3rem;
             width: 100%;
-            border-radius: 0 0 10px 10px;
-            margin-top: -5px;
+            margin-top: 10px;
+            font-weight: 500;
+            background: rgba(40, 40, 50, 0.7);
+            border-radius: 0 0 8px 8px;
         }
 
         .close {
             position: absolute;
-            top: 20px;
-            right: 35px;
+            top: 25px;
+            right: 40px;
             color: #f1f1f1;
-            font-size: 40px;
+            font-size: 45px;
             font-weight: bold;
             transition: 0.3s;
             cursor: pointer;
             z-index: 1001;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .close:hover,
         .close:focus {
-            color: #bbb;
+            color: #3498db;
             text-decoration: none;
         }
 
@@ -475,58 +599,310 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
             width: 100%;
+            flex-wrap: wrap;
         }
 
         .modal-btn {
-            background-color: rgba(255, 255, 255, 0.3);
+            background-color: rgba(52, 152, 219, 0.7);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 22px;
             border-radius: 50px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         .modal-btn:hover {
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(41, 128, 185, 0.85);
+            transform: translateY(-3px);
         }
 
         .modal-nav {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(52, 152, 219, 0.85);
             color: white;
             border: none;
-            padding: 15px;
+            padding: 16px;
             cursor: pointer;
             font-size: 24px;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .modal-nav:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(41, 128, 185, 1);
+            transform: translateY(-50%) scale(1.1);
         }
 
         #prevBtn {
-            left: 20px;
+            left: 25px;
         }
 
         #nextBtn {
+            right: 25px;
+        }
+
+        /* 响应式媒体查询优化 */
+        @media (max-width: 1200px) {
+            .image-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .mobile-image-container {
+                width: 90px;
+                height: 90px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            h1 {
+                font-size: 2.1rem;
+            }
+            
+            .dashboard-header {
+                padding: 15px;
+            }
+            
+            .search-box input {
+                width: 200px;
+            }
+            
+            thead th {
+                padding: 15px 12px;
+                font-size: 0.85rem;
+            }
+            
+            tbody td {
+                padding: 15px 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+            
+            .controls {
+                width: 100%;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .items-per-page {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 20px 15px;
+            }
+            
+            .pagination button {
+                padding: 9px 18px;
+                font-size: 0.95rem;
+            }
+            
+            .page-number {
+                min-width: 38px;
+                min-height: 38px;
+                font-size: 0.95rem;
+            }
+            
+            .page-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .modal-btn {
+                padding: 12px 18px;
+                font-size: 1rem;
+            }
+            
+            .modal-nav {
+                width: 45px;
+                height: 45px;
+                padding: 12px;
+                font-size: 20px;
+            }
+            
+            #prevBtn {
+                left: 15px;
+            }
+            
+            #nextBtn {
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            /* 在超小屏幕上显示卡片视图 */
+            .table-container {
+                display: none;
+            }
+            
+            .mobile-product-list {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .mobile-product-card {
+                display: flex;
+            }
+            
+            .mobile-card-body {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .mobile-status-container {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .mobile-card-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .mobile-card-info {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .mobile-card-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .mobile-status-container {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .mobile-image-container {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .page-info {
+                font-size: 0.9rem;
+            }
+            
+            .close {
+                top: 15px;
+                right: 15px;
+                font-size: 35px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .modal-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            #caption {
+                font-size: 1.1rem;
+                padding: 14px 0;
+            }
+        }
+
+        /* 加载指示器 */
+        .loader {
+            display: flex;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .loader-circle {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(52, 152, 219, 0.2);
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 错误提示 */
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #e74c3c;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 触摸手势提示 */
+        .touch-hint {
+            position: fixed;
+            bottom: 20px;
             right: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            display: none;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
         }
     </style>
 </head>
@@ -535,7 +911,7 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-search-plus"></i> 商品展示表格</h1>
-            <div class="subtitle">带居中放大图片功能 | 点击图片查看大图</div>
+            <div class="subtitle">移动优化版 - 点击图片查看大图</div>
         </header>
 
         <section class="dashboard">
@@ -558,6 +934,7 @@
                 </div>
             </div>
 
+            <!-- 桌面端表格视图 -->
             <div class="table-container">
                 <table id="productTable">
                     <thead>
@@ -572,23 +949,30 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Table rows will be populated by JavaScript -->
+                        <!-- 数据加载前显示加载指示器 -->
+                        <tr>
+                            <td colspan="7">
+                                <div class="loader">
+                                    <div class="loader-circle"></div>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+            
+            <!-- 移动端卡片视图 -->
+            <div class="mobile-product-list" id="mobileProductList"></div>
 
             <div class="pagination">
                 <button id="firstPage" title="首页"><i class="fas fa-step-backward"></i></button>
                 <button id="prevPage" title="上一页"><i class="fas fa-chevron-left"></i></button>
-
                 <!-- Page numbers will be generated here -->
-
                 <button id="nextPage" title="下一页"><i class="fas fa-chevron-right"></i></button>
                 <button id="lastPage" title="末页"><i class="fas fa-step-forward"></i></button>
 
                 <div class="page-info">
-                    显示 <span id="startRow">1</span> - <span id="endRow">10</span> 条，共 <span id="totalRows">120</span>
-                    条记录
+                    <span id="startRow">1</span> - <span id="endRow">10</span> 条，共 <span id="totalRows">0</span> 条记录
                 </div>
             </div>
         </section>
@@ -602,8 +986,8 @@
 
         <div class="modal-wrapper">
             <div class="modal-content-container">
-                <img class="modal-content" id="modalImage">
-                <div id="caption"></div>
+                <img class="modal-content" id="modalImage" src="" alt="">
+                <div id="caption">图片加载中...</div>
                 <div class="modal-controls">
                     <button class="modal-btn" id="zoomIn"><i class="fas fa-search-plus"></i> 放大</button>
                     <button class="modal-btn" id="zoomOut"><i class="fas fa-search-minus"></i> 缩小</button>
@@ -613,6 +997,8 @@
             </div>
         </div>
     </div>
+    
+    <div class="touch-hint" id="touchHint">← 左右滑动切换图片 →</div>
 
     <script>
         // 模拟数据
@@ -622,115 +1008,96 @@
                 image: "https://img.freepik.com/free-photo/new-smartphone-black-background-mock-up_53876-97389.jpg?w=900",
                 description: "高端旗舰手机，搭载最新处理器和AMOLED屏幕，支持5G网络"
             },
-
             {
                 id: 102, name: "笔记本电脑 Pro", category: "电脑", price: 7999, quantity: 18, status: "available",
                 image: "https://img.freepik.com/free-photo/laptop-mockup-concept_23-2148621157.jpg?w=900",
                 description: "轻薄设计，高性能处理器，超长续航时间，办公娱乐两相宜"
             },
-
             {
                 id: 103, name: "蓝牙耳机 Air", category: "耳机", price: 899, quantity: 0, status: "out-of-stock",
                 image: "https://img.freepik.com/free-photo/wireless-earbuds_53876-96805.jpg?w=900",
                 description: "真无线设计，主动降噪功能，高保真音质，24小时续航"
             },
-
             {
                 id: 104, name: "智能手表 3", category: "可穿戴", price: 1299, quantity: 32, status: "available",
                 image: "https://img.freepik.com/free-photo/smart-watch_53876-94783.jpg?w=900",
                 description: "全面健康监测，50米防水，支持运动模式识别，30天待机"
             },
-
             {
                 id: 105, name: "平板电脑 Lite", category: "平板", price: 2299, quantity: 24, status: "available",
                 image: "https://img.freepik.com/free-photo/white-tablet-screen-mock-up-concept_53876-89852.jpg?w=900",
                 description: "10英寸高分辨率屏幕，四扬声器环绕音效，超大电池容量"
             },
-
             {
                 id: 106, name: "游戏主机 Elite", category: "游戏", price: 4599, quantity: 8, status: "available",
                 image: "https://img.freepik.com/free-photo/gaming-console_53876-97308.jpg?w=900",
                 description: "支持4K分辨率，光线追踪技术，1TB固态硬盘，超强性能"
             },
-
             {
                 id: 107, name: "数码相机 Pro", category: "相机", price: 5899, quantity: 12, status: "available",
                 image: "https://img.freepik.com/free-photo/digital-camera_1409-8890.jpg?w=900",
                 description: "2400万像素，4K视频拍摄，五轴防抖，专业级摄影体验"
             },
-
             {
                 id: 108, name: "无线鼠标", category: "配件", price: 159, quantity: 76, status: "available",
                 image: "https://img.freepik.com/free-psd/wireless-computer-mouse-isolated-transparent-background_191095-9015.jpg?w=900",
                 description: "人体工学设计，2.4GHz无线连接，可编程按键，超长续航"
             },
-
             {
                 id: 109, name: "机械键盘 RGB", category: "配件", price: 599, quantity: 21, status: "available",
                 image: "https://img.freepik.com/free-photo/keyboard-computer-peripherals-close-up-view_1418-1480.jpg?w=900",
                 description: "Cherry MX轴体，RGB背光，全键无冲，双色注塑键帽"
             },
-
             {
                 id: 110, name: "4K显示器", category: "显示器", price: 2899, quantity: 14, status: "available",
                 image: "https://img.freepik.com/free-photo/wide-computer-monitor-displaying-technology-interface_53876-94884.jpg?w=900",
                 description: "27英寸4K HDR显示屏，99% sRGB色域，多接口支持"
             },
-
             {
                 id: 111, name: "路由器 AX6000", category: "网络", price: 899, quantity: 9, status: "available",
                 image: "https://img.freepik.com/free-psd/wireless-router-mock-up_1310-1528.jpg?w=900",
                 description: "WiFi 6技术，8数据流设计，OFDMA和MU-MIMO技术"
             },
-
             {
                 id: 112, name: "外置硬盘 2TB", category: "存储", price: 699, quantity: 27, status: "available",
                 image: "https://img.freepik.com/free-photo/external-hard-disk_53876-97381.jpg?w=900",
                 description: "USB 3.2接口，超快传输速度，防震设计，3年质保"
             },
-
             {
                 id: 113, name: "便携投影仪", category: "显示", price: 1899, quantity: 0, status: "out-of-stock",
                 image: "https://img.freepik.com/free-psd/portable-projector-mock-up_1310-1964.jpg?w=900",
                 description: "微型设计，支持1080P，内置音响，1000流明亮度"
             },
-
             {
                 id: 114, name: "蓝牙音箱", category: "音频", price: 399, quantity: 41, status: "available",
                 image: "https://img.freepik.com/free-photo/bluetooth-speaker_53876-89035.jpg?w=900",
                 description: "360°环绕音效，IPX7防水，20小时续航，支持立体声配对"
             },
-
             {
                 id: 115, name: "电子阅读器", category: "阅读", price: 999, quantity: 17, status: "available",
                 image: "https://img.freepik.com/free-photo/e-reader_53876-94814.jpg?w=900",
                 description: "7英寸电子墨水屏，32GB存储，24级背光调节，轻至180g"
             },
-
             {
                 id: 116, name: "游戏手柄", category: "游戏", price: 499, quantity: 6, status: "available",
                 image: "https://img.freepik.com/free-photo/gaming-gear-joystick_53876-94826.jpg?w=900",
                 description: "无线连接，震动反馈，可编程按键，人体工学设计"
             },
-
             {
                 id: 117, name: "VR眼镜", category: "可穿戴", price: 2799, quantity: 3, status: "available",
                 image: "https://img.freepik.com/free-psd/virtual-reality-headset-mock-up_1310-1779.jpg?w=900",
                 description: "6DOF追踪，110°视场角，高分辨率显示屏，佩戴舒适"
             },
-
             {
                 id: 118, name: "无人机 Mini", category: "摄影", price: 3499, quantity: 7, status: "available",
                 image: "https://img.freepik.com/free-photo/drone-with-camera_53876-97388.jpg?w=900",
                 description: "4K高清摄影，3轴云台稳定，31分钟续航，智能飞行模式"
             },
-
             {
                 id: 119, name: "打印机 Pro", category: "办公", price: 1899, quantity: 15, status: "available",
                 image: "https://img.freepik.com/free-photo/printer_1203-8501.jpg?w=900",
                 description: "无线打印，自动双面，彩色喷墨，支持多种纸张类型"
             },
-
             {
                 id: 120, name: "扫描仪", category: "办公", price: 1099, quantity: 0, status: "out-of-stock",
                 image: "https://img.freepik.com/free-psd/flat-scanner-mock-up_23-2148932946.jpg?w=900",
@@ -745,15 +1112,16 @@
         let sortDirection = 'asc';
         let currentProducts = [...products];
         let currentImageIndex = 0;
-        let currentProduct = null;
 
         // DOM元素
         const tableBody = document.getElementById('tableBody');
+        const mobileProductList = document.getElementById('mobileProductList');
         const itemsPerPageSelect = document.getElementById('itemsPerPage');
         const startRowEl = document.getElementById('startRow');
         const endRowEl = document.getElementById('endRow');
         const totalRowsEl = document.getElementById('totalRows');
         const searchInput = document.getElementById('searchInput');
+        totalRowsEl.textContent = products.length;
 
         // 图片模态框相关元素
         const modal = document.getElementById('imageModal');
@@ -766,14 +1134,15 @@
         const resetBtn = document.getElementById('resetBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-
-        // 图片缩放状态
+        const touchHint = document.getElementById('touchHint');
+        
+        // 图片操作状态
         let currentScale = 1;
         let currentRotation = 0;
+        let touchStartX = 0;
 
         // 初始化
         document.addEventListener('DOMContentLoaded', function () {
-            totalRowsEl.textContent = products.length;
             renderTable();
             setupEventListeners();
         });
@@ -929,43 +1298,99 @@
                     else if (e.key === 'Escape') {
                         closeImageModal();
                     }
+                    // +/- 键缩放
+                    else if (e.key === '+') {
+                        currentScale += 0.2;
+                        updateImageTransform();
+                    }
+                    else if (e.key === '-') {
+                        if (currentScale > 0.4) {
+                            currentScale -= 0.2;
+                            updateImageTransform();
+                        }
+                    }
                 }
             });
+            
+            // 触摸手势（移动端）
+            modalImg.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+                touchHint.style.display = 'none';
+            }, { passive: true });
+
+            modalImg.addEventListener('touchend', function(e) {
+                const touchEndX = e.changedTouches[0].screenX;
+                const diffX = touchStartX - touchEndX;
+                
+                // 滑动距离超过50px才触发
+                if (Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        navigateImage(1); // 向左滑动 -> 下一张
+                    } else {
+                        navigateImage(-1); // 向右滑动 -> 上一张
+                    }
+                }
+            }, { passive: true });
         }
 
+        // 设置图片点击事件
         function setupImageClickEvents() {
-            document.addEventListener('click', function (e) {
-                if (e.target.classList.contains('product-img') ||
-                    e.target.classList.contains('image-container') ||
-                    e.target.classList.contains('magnify-icon')) {
-
-                    const img = e.target.closest('.image-container').querySelector('.product-img');
-                    const productId = img.closest('tr').cells[0].textContent;
+            // 桌面端图片点击事件
+            document.querySelectorAll('.image-container, .magnify-icon').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    const row = this.closest('tr');
+                    const productId = row.cells[0].textContent;
                     const product = products.find(p => p.id === parseInt(productId));
-
                     if (product) {
                         openImageModal(product);
                     }
-                }
+                });
+            });
+            
+            // 移动端图片点击事件
+            document.querySelectorAll('.mobile-image-container, .mobile-magnify-icon').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    const card = this.closest('.mobile-product-card');
+                    const productId = card.querySelector('.mobile-card-id').textContent.split(': ')[1];
+                    const product = products.find(p => p.id === parseInt(productId));
+                    if (product) {
+                        openImageModal(product);
+                    }
+                });
             });
         }
 
         function openImageModal(product) {
-            modalImg.src = product.image;
+            // 图片懒加载
+            const placeholderImg = 'https://via.placeholder.com/600x400/3498db/ffffff?text=Loading...';
+            modalImg.src = placeholderImg;
+            
+            // 加载实际图片
+            const imgLoader = new Image();
+            imgLoader.src = product.image;
+            imgLoader.onload = function() {
+                modalImg.src = product.image;
+            };
+            
             modalCaption.textContent = `${product.name} - ${product.category}`;
             modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // 阻止背景滚动
+            document.body.style.overflow = 'hidden';
 
             // 重置缩放和旋转
             currentScale = 1;
             currentRotation = 0;
-            updateImageTransform();
-
-            // 设置当前产品
-            currentProduct = product;
+            modalImg.style.transform = 'scale(1) rotate(0deg)';
 
             // 查找当前产品在列表中的位置
             currentImageIndex = products.findIndex(p => p.id === product.id);
+            
+            // 移动端显示提示
+            if ('ontouchstart' in window) {
+                touchHint.style.display = 'block';
+                setTimeout(() => {
+                    touchHint.style.display = 'none';
+                }, 3000);
+            }
         }
 
         function navigateImage(direction) {
@@ -990,7 +1415,8 @@
 
         function closeImageModal() {
             modal.style.display = 'none';
-            document.body.style.overflow = 'auto'; // 恢复背景滚动
+            document.body.style.overflow = 'auto';
+            touchHint.style.display = 'none';
         }
 
         function updateImageTransform() {
@@ -1034,13 +1460,16 @@
 
             // 渲染表格行
             tableBody.innerHTML = '';
+            mobileProductList.innerHTML = '';
 
             if (paginatedProducts.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #7f8c8d;">没有找到匹配的产品数据</td></tr>`;
+                mobileProductList.innerHTML = `<div class="mobile-product-card" style="text-align: center; padding: 30px; color: #7f8c8d;">没有找到匹配的产品数据</div>`;
                 renderPagination(0);
                 return;
             }
 
+            // 渲染桌面表格
             paginatedProducts.forEach(product => {
                 const row = document.createElement('tr');
 
@@ -1067,6 +1496,50 @@
                 tableBody.appendChild(row);
             });
 
+            // 渲染移动端卡片
+            paginatedProducts.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'mobile-product-card';
+                
+                card.innerHTML = `
+                    <div class="mobile-card-header">
+                        <div class="mobile-image-container">
+                            <img src="${product.image}" alt="${product.name}">
+                            <div class="mobile-magnify-icon">
+                                <i class="fas fa-search-plus"></i>
+                            </div>
+                        </div>
+                        <div class="mobile-card-info">
+                            <div class="mobile-card-name">${product.name}</div>
+                            <div class="mobile-card-id">ID: ${product.id}</div>
+                        </div>
+                    </div>
+                    <div class="mobile-card-body">
+                        <div class="mobile-card-row">
+                            <div class="mobile-card-label"><i class="fas fa-tag"></i> 类别</div>
+                            <div class="mobile-card-value">${product.category}</div>
+                        </div>
+                        <div class="mobile-card-row">
+                            <div class="mobile-card-label"><i class="fas fa-dollar-sign"></i> 价格</div>
+                            <div class="mobile-card-value">¥${product.price.toLocaleString()}</div>
+                        </div>
+                        <div class="mobile-card-row">
+                            <div class="mobile-card-label"><i class="fas fa-box"></i> 库存</div>
+                            <div class="mobile-card-value">${product.quantity}</div>
+                        </div>
+                        <div class="mobile-status-container">
+                            <div class="mobile-status-label"><i class="fas fa-info-circle"></i> 状态</div>
+                            <span class="status ${product.status}">${product.status === 'available' ? '有货' : '缺货'}</span>
+                        </div>
+                    </div>
+                    <div class="mobile-card-description">
+                        ${product.description}
+                    </div>
+                `;
+
+                mobileProductList.appendChild(card);
+            });
+
             // 设置图片点击事件
             setupImageClickEvents();
 
@@ -1086,11 +1559,15 @@
 
             // 如果没有数据则不渲染分页按钮
             if (totalPages === 0) {
+                document.getElementById('firstPage').disabled = true;
+                document.getElementById('prevPage').disabled = true;
+                document.getElementById('nextPage').disabled = true;
+                document.getElementById('lastPage').disabled = true;
                 return;
             }
 
             // 添加页码按钮
-            const maxVisiblePages = 5; // 最多显示多少个页码按钮
+            const maxVisiblePages = 5;
             let startPage, endPage;
 
             if (totalPages <= maxVisiblePages) {
@@ -1123,6 +1600,9 @@
                     e.stopPropagation();
                     currentPage = parseInt(this.dataset.page);
                     renderTable();
+                    
+                    // 平滑滚动到顶部
+                    document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
                 });
 
                 nextBtn.insertAdjacentElement('beforebegin', pageBtn);
