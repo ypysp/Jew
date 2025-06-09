@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,10 @@
     <style>
         * {
             margin: 0;
-            padding极光翡翠项链;
+            padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
@@ -19,13 +20,13 @@
             padding: 20px;
             min-height: 100vh;
         }
-        
+
         .header {
             text-align: center;
             margin-bottom: 40px;
             padding: 20px;
         }
-        
+
         h1 {
             font-size: 3rem;
             background: linear-gradient(to right, #d4af37, #a67c52);
@@ -35,7 +36,7 @@
             margin-bottom: 15px;
             letter-spacing: 2px;
         }
-        
+
         .subtitle {
             font-size: 1.2rem;
             max-width: 700px;
@@ -43,7 +44,7 @@
             color: #b8b8b8;
             line-height: 1.6;
         }
-        
+
         .controls {
             display: flex;
             justify-content: center;
@@ -51,8 +52,10 @@
             margin-bottom: 30px;
             gap: 20px;
         }
-        
-        .search-container, .category-filter, .per-page {
+
+        .search-container,
+        .category-filter,
+        .per-page {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -60,8 +63,9 @@
             border-radius: 30px;
             padding: 10px 20px;
         }
-        
-        .search-container input, .category-filter select, .极光翡翠项链;
+
+        .search-container input,
+        .category-filter select {
             background: transparent;
             border: none;
             color: #fff;
@@ -69,11 +73,11 @@
             font-size: 1rem;
             min-width: 150px;
         }
-        
+
         select option {
             background: #222;
         }
-        
+
         .products-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -82,7 +86,7 @@
             margin: 0 auto;
             min-height: 800px;
         }
-        
+
         .product-card {
             background: rgba(30, 30, 30, 0.8);
             border-radius: 12px;
@@ -94,26 +98,35 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         .product-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
             border-color: #d4af37;
         }
-        
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* 关键修改：使容器变成1:1的正方形 */
+        }
+
         .product-image {
-            height: 200px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-position: center;
             background-size: cover;
-            position: relative;
             cursor: zoom-in;
             transition: all 0.3s ease;
         }
-        
+
         .product-image:hover {
             opacity: 0.9;
         }
-        
+
         .product-category {
             position: absolute;
             top: 15px;
@@ -124,21 +137,34 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 500;
+            z-index: 10;
         }
-        
+
+        .product-id-label {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
         .product-details {
             padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
-        
+
         .product-title {
             font-size: 1.3rem;
             margin-bottom: 10px;
             color: #d4af37;
         }
-        
+
         .product-material {
             display: flex;
             align-items: center;
@@ -147,11 +173,11 @@
             font-size: 0.9rem;
             color: #aaa;
         }
-        
+
         .material-icon {
             color: #d4af37;
         }
-        
+
         .product-description {
             font-size: 0.95rem;
             line-height: 1.6;
@@ -159,7 +185,7 @@
             margin-bottom: 15px;
             flex-grow: 1;
         }
-        
+
         .product-footer {
             display: flex;
             justify-content: space-between;
@@ -168,12 +194,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 15px;
         }
-        
-        .product-id {
-            font-size: 0.9rem;
-            color: #777;
-        }
-        
+
         /* 图片弹窗样式 */
         .image-modal {
             display: none;
@@ -188,7 +209,7 @@
             transition: opacity 0.3s ease;
             backdrop-filter: blur(10px);
         }
-        
+
         .image-modal.active {
             display: flex;
             opacity: 1;
@@ -196,21 +217,22 @@
             justify-content: center;
             animation: fadeIn 0.3s forwards;
         }
-        
+
         .modal-content {
             max-width: 90%;
             max-height: 90%;
             position: relative;
         }
-        
+
         .modal-image {
             max-width: 100%;
             max-height: 85vh;
             border: 2px solid #d4af37;
             border-radius: 5px;
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+            object-fit: contain;
         }
-        
+
         .close-btn {
             position: absolute;
             top: 15px;
@@ -226,35 +248,35 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 1100;
         }
-        
+
         .close-btn:hover {
             transform: rotate(90deg);
             background: #d4af37;
             color: #000;
         }
-        
+
         .modal-info {
             color: #fff;
             text-align: center;
-            margin-top: 20px;
-            padding: 0 20px;
+            padding: 20px;
             max-width: 600px;
-            margin: 20px auto 0;
+            margin: 0 auto;
         }
-        
+
         .modal-title {
             font-size: 1.8rem;
             margin-bottom: 10px;
             color: #d4af37;
         }
-        
+
         .modal-description {
             font-size: 1.1rem;
             line-height: 1.6;
             color: #ccc;
         }
-        
+
         /* 分页控件样式 */
         .pagination {
             display: flex;
@@ -262,7 +284,7 @@
             margin: 40px 0 20px;
             gap: 10px;
         }
-        
+
         .pagination-btn {
             width: 40px;
             height: 40px;
@@ -276,30 +298,30 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .pagination-btn:hover {
             background: #d4af37;
             color: #000;
         }
-        
+
         .pagination-btn.active {
             background: #d4af37;
             color: #000;
             font-weight: bold;
         }
-        
+
         .pagination-btn.disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         .page-info {
             text-align: center;
             color: #aaa;
-            margin-bottom: 20极光翡翠项链;
+            margin-bottom: 20px;
             font-size: 0.9rem;
         }
-        
+
         .footer {
             text-align: center;
             margin-top: 20px;
@@ -307,47 +329,51 @@
             color: #777;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         @media (max-width: 1200px) {
             .products-container {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-        
+
         @media (max-width: 768px) {
             .products-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .controls {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .pagination {
                 flex-wrap: wrap;
             }
-            
+
             .modal-content {
                 max-width: 95%;
             }
-            
+
             h1 {
                 font-size: 2.2rem;
             }
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
+
+    <script src="Jewdata.js"></script>
+
 </head>
+
 <body>
     <!-- 图片弹窗 -->
     <div class="image-modal" id="imageModal">
@@ -363,17 +389,17 @@
 
     <div class="header">
         <h1>高级珠宝系列</h1>
-        <p class="subtitle">探索我们精选的高级珠宝作品，每件均由精湛工艺打造，展现珍贵宝石的璀璨光芒与独特美学。</p>
+        <p class="subtitle">甄选全球顶级宝石，以精湛工艺打造永恒艺术珍品</p>
     </div>
-    
+
     <div class="controls">
         <div class="search-container">
-            <span>🔍</span>
+            <i class="fas fa-search"></i>
             <input type="text" id="searchInput" placeholder="搜索产品名称或描述...">
         </div>
-        
+
         <div class="category-filter">
-            <span>⌄</span>
+            <i class="fas fa-filter"></i>
             <select id="categoryFilter">
                 <option value="all">所有类别</option>
                 <option value="胸针">胸针</option>
@@ -385,7 +411,7 @@
                 <option value="吊坠">吊坠</option>
             </select>
         </div>
-        
+
         <div class="per-page">
             <span>每页显示：</span>
             <select id="perPageSelect">
@@ -396,139 +422,36 @@
             </select>
         </div>
     </div>
-    
+
     <div class="page-info">
         显示 <span id="currentItems">0</span> 个产品，共 <span id="totalItems">0</span> 个产品
     </div>
-    
+
     <div class="products-container" id="productsContainer">
         <!-- 产品卡片将通过JavaScript动态生成 -->
     </div>
-    
+
     <div class="pagination" id="paginationContainer">
         <!-- 分页按钮将通过JavaScript动态生成 -->
     </div>
-    
+
     <div class="footer">
         <p>© 2023 高级珠宝收藏馆 | 每件作品都是独特艺术品</p>
     </div>
 
     <script>
-        const products = [
-            {
-                id: 201, name: "翡翠蝴蝶胸针1", category: "胸针", material: "翡翠/钻石",
-                image: "https://images.unsplash.com/photo-1591955506264-3f5a6834570a?q=80",
-                description: "AI设计的天然翡翠蝴蝶造型胸针，镶嵌钻石翅膀"
-            },
-            {
-                id: 202, name: "蓝宝石手链", category: "手链", material: "蓝宝石/白金",
-                image: "https://images.unsplash.com/photo-1591955506264-3f5a6834570a?q=80",
-                description: "多颗极光翡翠项链手链，灵感来自海洋波纹"
-            },
-            {
-                id: 203, name: "月光石项链", category: "项链", material: "月光石/铂金",
-                image: "https://images.unsplash.com/photo-1591955506264-3f5a6834570a?q=80",
-                description: "月光石与白色托帕石结合，形成月光下的梦幻感"
-            },
-            {
-                id: 204, name: "复古戒指", category: "戒指", material: "红宝石/黄金",
-                image: "https://images.unsplash.com/photo-1591955506264-3极光翡翠项链?q=80",
-                description: "维多利亚风格复古戒指，红宝石主石搭配钻石"
-            },
-            {
-                id: 205, name: "钻石耳坠", category: "耳环", material: "钻石/铂金",
-                image: "https://images.unsplash.com/photo-1631723208611-b2be56fa7d5?q=80",
-                description: "垂坠式钻石耳环，每颗钻石净度达到VS级"
-            },
-            {
-                id: 206, name: "珍珠贝母手镯", category: "手镯", material: "贝母/珍珠",
-                image: "https://images.unsplash.com/photo-1588442494894-a5c6a5c9d1e9?q=80",
-                description: "日本贝母与澳大利亚珍珠结合，光滑如玉的质感"
-            },
-            {
-                id: 207, name: "孔雀石吊坠", category: "吊坠", material: "孔雀石/18K金",
-                image: "https://images.unsplash.com/photo-1596180880919-f1e6b4f8a0c7?q=80",
-                description: "天然孔雀石与18K金镶嵌，独特的花纹展现自然美感"
-            },
-            {
-                id: 208, name: "祖母绿戒指", category: "戒指", material: "祖母绿/钻石",
-                image: "https://images.unsplash.com/photo-1614728894747-3c5bd6a56a7a?q=80",
-                description: "哥伦比亚祖母绿主石，配以长方形切割钻石"
-            },
-            {
-                id: 209, name: "钛金属手镯", category: "手镯", material: "钛金属",
-                image: "https://images.unsplash.com/photo-1600720781444-1a63c6d7a36a?q=80",
-                description: "轻质钛金属结构，阳极氧化处理呈现渐变色彩"
-            },
-            {
-                id: 210, name: "蛋白石项链", category: "项链", material: "蛋白石/黄金",
-                image: "https://images.unsplash.com/photo-1519710164239-ccbc48d4a4f2?q=80",
-                description: "澳大利亚彩蛋白石，在光线下呈现奇幻变彩效果"
-            },
-            {
-                id: 211, name: "金丝编织戒指", category: "戒指", material: "18K金丝",
-                image: "https://images.unsplash.com/photo-1631725627452-e5f06f1c2c68?q=80",
-                description: "18K金丝手工编织，形成独特的纹理和层次感"
-            },
-            {
-                id: 212, name: "钻石星空手链", category: "手链", material: "钻石/白金",
-                image: "https://images.unsplash.com/photo-1593578661660-7dcf4d245ebc?q=80",
-                description: "不同大小钻石按星座排列，如同夜空中闪烁的星星"
-            },
-            {
-                id: 213, name: "紫水晶手镯", category: "手镯", material: "紫水晶/银",
-                image: "https://images.unsplash.com/photo-1614728894747-3c5bd6a56a7a?q=80",
-                description: "巴西紫水晶环绕银手镯，深紫色调充满神秘感"
-            },
-            {
-                id: 214, name: "琥珀吊坠", category: "吊坠", material: "琥珀/黄金",
-                image: "https://images.unsplash.com/photo-1589478741087-8a9b5dc7fa77?q=80",
-                description: "波罗的海天然琥珀，内含完整植物标本"
-            },
-            {
-                id: 215, name: "珍珠项链", category: "项链", material: "珍珠/铂金",
-                image: "https://images.unsplash.com/photo-1534214526114-0ea4d47b04fa?q=80",
-                description: "南海天然珍珠项链，光泽圆润尺寸均等"
-            },
-            {
-                id: 216, name: "玫瑰金宝石戒指", category: "戒指", material: "粉晶/玫瑰金",
-                image: "https://images.unsplash.com/photo-1627687942510-950ead345cef?q=80",
-                description: "玫瑰金镶嵌粉晶，流线型设计适合日常佩戴"
-            },
-            {
-                id: 217, name: "欧泊吊坠", category: "吊坠", material: "火欧泊/白金",
-                image: "https://images.unsplash.com/photo-1605106901228-43413b0d7c7a?q=80",
-                description: "墨西哥火欧泊主石，火焰般的变彩效果"
-            },
-            {
-                id: 218, name: "蓝晶石手链", category: "手链", material: "蓝晶石/银",
-                image: "https://images.unsplash.com/photo-1619644436148-85f2afbd9cdd?q=80",
-                description: "天然蓝晶石搭配925银，色彩渐变自然"
-            },
-            {
-                id: 219, name: "黑钻男士戒", category: "戒指", material: "黑钻/钛金",
-                image: "https://images.unsplash.com/photo-1600722915014-3815c2b44f6c?q=80",
-                description: "工业风设计，多颗黑钻镶嵌钛金戒圈"
-            },
-            {
-                id: 220, name: "海蓝宝耳环", category: "耳环", material: "海蓝宝/白金",
-                image: "https://images.unsplash.com/photo-1613928831459-3f33ddeae190?q=80",
-                description: "水滴形海蓝宝石，如海水般清澈透明"
-            }
-        ];
-
         // 分页相关变量
         let currentPage = 1;
         let perPage = 9;
         let filteredProducts = [...products];
-        
+
         // DOM元素
         const imageModal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
         const modalTitle = document.getElementById('modalTitle');
         const modalDescription = document.getElementById('modalDescription');
         const closeModal = document.getElementById('closeModal');
-        
+
         // 初始化函数
         function init() {
             // 绑定每页显示数量更改事件
@@ -537,35 +460,35 @@
                 currentPage = 1;
                 renderPaginatedProducts();
             });
-            
+
             // 添加搜索功能
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
                 filterProducts(searchTerm);
             });
-            
+
             // 添加分类筛选
             document.getElementById('categoryFilter').addEventListener('change', (e) => {
                 const category = e.target.value;
                 filterProductsByCategory(category);
             });
-            
+
             // 关闭弹窗事件
             closeModal.addEventListener('click', () => {
                 imageModal.classList.remove('active');
             });
-            
+
             // 点击弹窗背景关闭
             imageModal.addEventListener('click', (e) => {
                 if (e.target === imageModal) {
                     imageModal.classList.remove('active');
                 }
             });
-            
+
             // 初始渲染
             renderPaginatedProducts();
         }
-        
+
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', init);
 
@@ -573,7 +496,7 @@
         function renderProducts(productsArray) {
             const container = document.getElementById('productsContainer');
             container.innerHTML = '';
-            
+
             if (productsArray.length === 0) {
                 container.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 50px; color: #aaa;">
@@ -584,38 +507,38 @@
                 `;
                 return;
             }
-            
+
             productsArray.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                
+
                 card.innerHTML = `
-                    <div class="product-image" data-id="${product.id}" style="background-image: url('${product.image}')">
+                    <div class="image-container">
+                        <div class="product-image" data-id="${product.id}" style="background-image: url('${product.image}')">
+                        </div>
                         <span class="product-category">${product.category}</span>
+                        <span class="product-id-label">产品ID: ${product.id}</span>
                     </div>
-                    <div class="product-d极光翡翠项链">
+                    <div class="product-details">
                         <h3 class="product-title">${product.name}</h3>
                         <div class="product-material">
                             <span class="material-icon">💎</span>
                             <span>${product.material}</span>
                         </div>
                         <p class="product-description">${product.description}</p>
-                        <div class="product-footer">
-                            <span class="product-id">产品ID: ${product.id}</span>
-                        </div>
                     </div>
                 `;
-                
+
                 // 添加图片点击事件监听器
                 const imageElement = card.querySelector('.product-image');
                 imageElement.addEventListener('click', () => {
                     openImageModal(product);
                 });
-                
+
                 container.appendChild(card);
             });
         }
-        
+
         // 打开图片弹窗
         function openImageModal(product) {
             modalImg.src = product.image;
@@ -631,52 +554,52 @@
                 filteredProducts = [...products];
             } else {
                 filteredProducts = products.filter(product => {
-                    return product.name.toLowerCase().includes(searchTerm) || 
-                           product.description.toLowerCase().includes(searchTerm) ||
-                           product.category.toLowerCase().includes(searchTerm) || 
-                           product.material.toLowerCase().includes(searchTerm);
+                    return product.name.toLowerCase().includes(searchTerm) ||
+                        product.description.toLowerCase().includes(searchTerm) ||
+                        product.category.toLowerCase().includes(searchTerm) ||
+                        product.material.toLowerCase().includes(searchTerm);
                 });
             }
-            
+
             currentPage = 1;
             renderPaginatedProducts();
         }
-        
+
         // 根据类别筛选产品
         function filterProductsByCategory(category) {
             if (category === 'all') {
                 filteredProducts = [...products];
             } else {
-                filteredProducts = products.filter(product => 
+                filteredProducts = products.filter(product =>
                     product.category.toLowerCase() === category.toLowerCase()
                 );
             }
-            
+
             currentPage = 1;
             renderPaginatedProducts();
         }
-        
+
         // 渲染分页产品
         function renderPaginatedProducts() {
             const start = (currentPage - 1) * perPage;
             const end = start + perPage;
             const paginatedProducts = filteredProducts.slice(start, end);
-            
+
             renderProducts(paginatedProducts);
             renderPagination();
-            
+
             // 更新产品计数
-            document.getElementById('currentItems').textContent = 
+            document.getElementById('currentItems').textContent =
                 paginatedProducts.length ? `${start + 1}-${Math.min(start + perPage, filteredProducts.length)}` : '0';
             document.getElementById('totalItems').textContent = filteredProducts.length;
         }
-        
+
         // 渲染分页控件
         function renderPagination() {
             const totalPages = Math.ceil(filteredProducts.length / perPage);
             const paginationContainer = document.getElementById('paginationContainer');
             paginationContainer.innerHTML = '';
-            
+
             // 添加上一页按钮
             const prevBtn = document.createElement('button');
             prevBtn.className = `pagination-btn ${currentPage === 1 ? 'disabled' : ''}`;
@@ -688,17 +611,17 @@
                 }
             };
             paginationContainer.appendChild(prevBtn);
-            
+
             // 添加页码按钮
             const maxButtons = 5;
             let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
             let endPage = Math.min(totalPages, startPage + maxButtons - 1);
-            
+
             // 确保最多显示5个按钮
             if (endPage - startPage < maxButtons - 1) {
                 startPage = Math.max(1, endPage - maxButtons + 1);
             }
-            
+
             // 添加页码按钮
             for (let i = startPage; i <= endPage; i++) {
                 const pageBtn = document.createElement('button');
@@ -710,7 +633,7 @@
                 };
                 paginationContainer.appendChild(pageBtn);
             }
-            
+
             // 添加下一页按钮
             const nextBtn = document.createElement('button');
             nextBtn.className = `pagination-btn ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}`;
@@ -725,4 +648,5 @@
         }
     </script>
 </body>
+
 </html>
