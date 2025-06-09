@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品展示表格 - 带居中放大图片功能 (优化版)</title>
+    <title>珠宝饰品AI设计稿展示</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         * {
             margin: 0;
@@ -36,7 +37,7 @@
         }
 
         h1 {
-            font-size: 2.4rem;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
             color: #2c3e50;
             margin-bottom: 10px;
             position: relative;
@@ -47,16 +48,16 @@
         h1:after {
             content: '';
             display: block;
-            width: 80px;
+            width: clamp(60px, 15vw, 80px);
             height: 4px;
-            background: linear-gradient(to right, #3498db, #2c3e50);
+            background: linear-gradient(to right, #d4af37, #a67c52);
             margin: 15px auto;
             border-radius: 2px;
         }
 
         .subtitle {
             color: #7f8c8d;
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2vw, 1.1rem);
             margin-bottom: 20px;
         }
 
@@ -70,14 +71,21 @@
         }
 
         .dashboard-header {
-            padding: 20px 25px;
+            padding: 15px 20px;
             display: flex;
             flex-wrap: wrap;
             gap: 15px;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to right, #3498db, #2c3e50);
+            background: linear-gradient(to right, #d4af37, #a67c52);
             color: white;
+        }
+
+        .dashboard-title {
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-weight: 800;
+
+
         }
 
         .controls {
@@ -85,12 +93,17 @@
             flex-wrap: wrap;
             gap: 15px;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .search-box {
             position: relative;
             display: flex;
             align-items: center;
+            flex: 1;
+            min-width: 100%;
+            max-width: 500px;
         }
 
         .search-box input {
@@ -98,7 +111,7 @@
             border: none;
             border-radius: 50px;
             background-color: rgba(255, 255, 255, 0.92);
-            width: 250px;
+            width: 100%;
             font-size: 1rem;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
@@ -106,35 +119,14 @@
 
         .search-box input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
-            width: 300px;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
         }
 
         .search-icon {
             position: absolute;
             left: 18px;
-            color: #3498db;
+            color: #d4af37;
             font-size: 18px;
-        }
-
-        .items-per-page {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .items-per-page select {
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .items-per-page select:hover {
-            border-color: #3498db;
         }
 
         .table-container {
@@ -158,7 +150,7 @@
             text-transform: uppercase;
             font-size: 0.9rem;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid #3498db;
+            border-bottom: 2px solid #d4af37;
             cursor: pointer;
             position: sticky;
             top: 0;
@@ -167,29 +159,29 @@
         }
 
         thead th:first-child {
-            width: 100px;
+            width: 80px;
         }
 
         thead th:nth-child(2) {
-            width: 150px;
+            width: 140px;
         }
 
         thead th:hover {
-            background-color: #e1f0fa;
+            background-color: #fcf5e6;
         }
 
         thead th.sort-asc:after {
             content: "▴";
             position: absolute;
             right: 10px;
-            color: #3498db;
+            color: #d4af37;
         }
 
         thead th.sort-desc:after {
             content: "▾";
             position: absolute;
             right: 10px;
-            color: #3498db;
+            color: #d4af37;
         }
 
         tbody tr {
@@ -197,32 +189,32 @@
         }
 
         tbody tr:nth-child(even) {
-            background-color: #f9fbfd;
+            background-color: #fdfbf5;
         }
 
         tbody tr:hover {
-            background-color: #e8f4fe;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15);
+            background-color: #fcf6eb;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
         }
 
         tbody td {
             padding: 18px 15px;
             color: #495057;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #f0e6d1;
             vertical-align: middle;
         }
 
-        /* 图片容器优化 */
         .image-container {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: clamp(100px, 12vw, 120px);
+            height: clamp(100px, 12vw, 120px);
             overflow: hidden;
             border-radius: 10px;
             margin: 0 auto;
-            cursor: pointer;
+            cursor: fixed;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            border: 1px solid #f0e6d1;
         }
 
         .image-container:hover {
@@ -241,91 +233,76 @@
             position: absolute;
             bottom: 10px;
             right: 10px;
-            background: rgba(52, 152, 219, 0.85);
+            background: rgba(212, 175, 55, 0.85);
             color: white;
-            width: 34px;
-            height: 34px;
+            width: clamp(28px, 3.5vw, 34px);
+            height: clamp(28px, 3.5vw, 34px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: clamp(14px, 1.5vw, 16px);
             transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
         .magnify-icon:hover {
-            background: #2980b9;
+            background: #b8982f;
             transform: scale(1.15);
         }
 
-        .status {
-            padding: 8px 16px;
-            border-radius: 50px;
+        .material-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
             font-weight: 500;
-            font-size: 0.85rem;
+            font-size: clamp(0.8rem, 1.2vw, 0.85rem);
             display: inline-block;
-            min-width: 85px;
             text-align: center;
-        }
-
-        .status.available {
-            background-color: #e8f7ef;
-            color: #27ae60;
-            box-shadow: inset 0 0 0 2px #27ae60;
-        }
-
-        .status.out-of-stock {
-            background-color: #fdeaea;
-            color: #e74c3c;
-            box-shadow: inset 0 0 0 2px #e74c3c;
+            background-color: #f5f0e4;
+            color: #a67c52;
+            border: 1px solid #e6dcc2;
         }
 
         .product-detail {
-            font-size: 0.9rem;
+            font-size: clamp(0.85rem, 1.2vw, 0.9rem);
             color: #7f8c8d;
             margin-top: 8px;
             line-height: 1.4;
         }
 
-        .product-highlight {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 1.1rem;
-        }
-
         .pagination {
             display: flex;
             justify-content: center;
-            padding: 25px;
-            gap: 12px;
+            padding: 20px;
+            gap: 10px;
             flex-wrap: wrap;
-            border-top: 1px solid #eee;
-            background-color: #f8fafc;
+            border-top: 1px solid #f0e6d1;
+            background-color: #fdfaf3;
         }
 
         .pagination button {
-            padding: 10px 20px;
+            padding: clamp(8px, 1.2vw, 10px) clamp(15px, 2vw, 20px);
             background-color: white;
-            border: 1px solid #ddd;
+            border: 1px solid #f0e6d1;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: #3498db;
+            color: #a67c52;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            min-width: max-content;
         }
 
         .pagination button:not([disabled]):hover {
-            background-color: #3498db;
+            background-color: #d4af37;
             color: white;
-            border-color: #3498db;
+            border-color: #d4af37;
             transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
         }
 
         .pagination button[disabled] {
@@ -334,26 +311,32 @@
         }
 
         .page-number {
-            min-width: 44px;
-            min-height: 44px;
+            min-width: clamp(38px, 4vw, 44px);
+            min-height: clamp(38px, 4vw, 44px);
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             transition: all 0.3s ease;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            border-radius: 8px;
+            background-color: white;
+            border: 1px solid #f0e6d1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            color: #a67c52;
+            font-weight: 600;
         }
 
         .page-number:hover:not(.active) {
-            background-color: #e1f0fa;
+            background-color: #fcf5e6;
         }
 
         .page-number.active {
-            background-color: #3498db;
+            background-color: #d4af37;
             color: white;
-            border-color: #3498db;
+            border-color: #d4af37;
             font-weight: 700;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.25);
+            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.25);
         }
 
         .page-info {
@@ -363,16 +346,18 @@
             margin-top: 15px;
             width: 100%;
             justify-content: center;
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1rem);
             color: #7f8c8d;
+            flex-wrap: wrap;
         }
 
-        /* 移动端卡片视图优化 */
+        /* 移动端卡片视图 */
         .mobile-product-list {
             display: none;
             padding: 15px;
+            gap: 16px;
         }
-        
+
         .mobile-product-card {
             display: flex;
             flex-direction: column;
@@ -383,6 +368,7 @@
             padding: 20px;
             position: relative;
             transition: transform 0.3s ease;
+            border: 1px solid #f0e6d1;
         }
 
         .mobile-product-card:hover {
@@ -398,15 +384,16 @@
         }
 
         .mobile-image-container {
-            width: 100px;
-            height: 100px;
+            width: clamp(80px, 25vw, 100px);
+            height: clamp(80px, 25vw, 100px);
             border-radius: 10px;
             overflow: hidden;
             position: relative;
-            cursor: pointer;
+            cursor: fixed;
             flex-shrink: 0;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
+            border: 1px solid #f0e6d1;
         }
 
         .mobile-image-container img {
@@ -423,16 +410,16 @@
             position: absolute;
             bottom: 8px;
             right: 8px;
-            background: rgba(52, 152, 219, 0.85);
+            background: rgba(212, 175, 55, 0.85);
             color: white;
-            width: 28px;
-            height: 28px;
+            width: clamp(22px, 3.5vw, 28px);
+            height: clamp(22px, 3.5vw, 28px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: clamp(12px, 1.2vw, 14px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .mobile-card-info {
@@ -442,12 +429,12 @@
         .mobile-card-name {
             font-weight: 700;
             color: #2c3e50;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3.5vw, 1.2rem);
             margin-bottom: 4px;
         }
 
         .mobile-card-id {
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             color: #7f8c8d;
         }
 
@@ -461,14 +448,15 @@
         .mobile-card-row {
             display: flex;
             flex-direction: column;
-            background: #f8fafc;
+            background: #fdfaf3;
             border-radius: 8px;
             padding: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f0e6d1;
         }
 
         .mobile-card-label {
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
             color: #7f8c8d;
             margin-bottom: 5px;
             display: flex;
@@ -477,40 +465,42 @@
         }
 
         .mobile-card-label i {
-            color: #3498db;
+            color: #d4af37;
+            font-size: clamp(0.8rem, 2.5vw, 0.9rem);
         }
 
         .mobile-card-value {
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: clamp(0.95rem, 3vw, 1.05rem);
             color: #2c3e50;
         }
 
         .mobile-card-description {
-            font-size: 0.92rem;
+            font-size: clamp(0.85rem, 3vw, 0.92rem);
             color: #7f8c8d;
             line-height: 1.5;
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px dashed #eee;
+            border-top: 1px dashed #f0e6d1;
         }
-        
-        .mobile-status-container {
+
+        .mobile-material-container {
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #f8fafc;
+            background: #fdfaf3;
             border-radius: 8px;
             padding: 12px;
             margin-top: 10px;
+            border: 1px solid #f0e6d1;
         }
-        
-        .mobile-status-label {
+
+        .mobile-material-label {
             font-size: 0.9rem;
             color: #7f8c8d;
         }
 
-        /* 图片模态框优化 */
+        /* 图片模态框 */
         #imageModal {
             display: none;
             position: fixed;
@@ -522,6 +512,7 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(5px);
+            touch-action: manipulation;
         }
 
         .modal-wrapper {
@@ -530,6 +521,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 30px 15px;
+            position: relative;
         }
 
         .modal-content-container {
@@ -550,7 +542,7 @@
             transform-origin: center center;
             transition: transform 0.3s ease;
             border-radius: 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         @keyframes zoom {
@@ -558,6 +550,7 @@
                 transform: scale(0.8);
                 opacity: 0;
             }
+
             to {
                 transform: scale(1);
                 opacity: 1;
@@ -568,7 +561,7 @@
             text-align: center;
             color: #fff;
             padding: 18px 0;
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3.5vw, 1.3rem);
             width: 100%;
             margin-top: 10px;
             font-weight: 500;
@@ -578,20 +571,20 @@
 
         .close {
             position: absolute;
-            top: 25px;
-            right: 40px;
+            top: 20px;
+            right: 25px;
             color: #f1f1f1;
-            font-size: 45px;
+            font-size: clamp(35px, 8vw, 45px);
             font-weight: bold;
             transition: 0.3s;
             cursor: pointer;
             z-index: 1001;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .close:hover,
         .close:focus {
-            color: #3498db;
+            color: #d4af37;
             text-decoration: none;
         }
 
@@ -605,23 +598,23 @@
         }
 
         .modal-btn {
-            background-color: rgba(52, 152, 219, 0.7);
+            background-color: rgba(212, 175, 55, 0.7);
             color: white;
             border: none;
-            padding: 14px 22px;
+            padding: clamp(10px, 2.5vw, 14px) clamp(15px, 3.5vw, 22px);
             border-radius: 50px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
             font-weight: 600;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .modal-btn:hover {
-            background-color: rgba(41, 128, 185, 0.85);
+            background-color: rgba(184, 152, 47, 0.85);
             transform: translateY(-3px);
         }
 
@@ -629,46 +622,44 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(52, 152, 219, 0.85);
+            background: rgba(212, 175, 55, 0.85);
             color: white;
             border: none;
-            padding: 16px;
+            padding: 12px;
             cursor: pointer;
-            font-size: 24px;
+            font-size: clamp(20px, 4.5vw, 24px);
             border-radius: 50%;
-            width: 55px;
-            height: 55px;
+            width: clamp(45px, 10vw, 55px);
+            height: clamp(45px, 10vw, 55px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 10;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         .modal-nav:hover {
-            background: rgba(41, 128, 185, 1);
+            background: rgba(184, 152, 47, 1);
             transform: translateY(-50%) scale(1.1);
         }
 
         #prevBtn {
-            left: 25px;
+            left: clamp(10px, 3.5vw, 25px);
         }
 
         #nextBtn {
-            right: 25px;
+            right: clamp(10px, 3.5vw, 25px);
         }
 
-        /* 响应式媒体查询优化 */
+        /* 响应式媒体查询 */
         @media (max-width: 1200px) {
-            .image-container {
-                width: 100px;
-                height: 100px;
+            thead th {
+                padding: 15px 12px;
             }
-            
-            .mobile-image-container {
-                width: 90px;
-                height: 90px;
+
+            tbody td {
+                padding: 15px 12px;
             }
         }
 
@@ -676,176 +667,76 @@
             body {
                 padding: 20px 10px;
             }
-            
-            h1 {
-                font-size: 2.1rem;
-            }
-            
+
             .dashboard-header {
-                padding: 15px;
+                flex-direction: column;
+                gap: 12px;
             }
-            
-            .search-box input {
-                width: 200px;
-            }
-            
-            thead th {
-                padding: 15px 12px;
-                font-size: 0.85rem;
-            }
-            
-            tbody td {
-                padding: 15px 12px;
+
+            .controls {
+                width: 100%;
             }
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.9rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .dashboard-header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 15px;
-            }
-            
-            .controls {
-                width: 100%;
-            }
-            
-            .search-box input {
-                width: 100%;
-            }
-            
-            .items-per-page {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
             .pagination {
                 flex-direction: column;
                 align-items: center;
                 gap: 8px;
                 padding: 20px 15px;
             }
-            
-            .pagination button {
-                padding: 9px 18px;
-                font-size: 0.95rem;
-            }
-            
-            .page-number {
-                min-width: 38px;
-                min-height: 38px;
-                font-size: 0.95rem;
-            }
-            
-            .page-info {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .modal-btn {
-                padding: 12px 18px;
-                font-size: 1rem;
-            }
-            
-            .modal-nav {
-                width: 45px;
-                height: 45px;
-                padding: 12px;
-                font-size: 20px;
-            }
-            
-            #prevBtn {
-                left: 15px;
-            }
-            
-            #nextBtn {
-                right: 15px;
+
+            .modal-controls {
+                gap: 10px;
             }
         }
 
         @media (max-width: 600px) {
-            /* 在超小屏幕上显示卡片视图 */
             .table-container {
                 display: none;
             }
-            
+
             .mobile-product-list {
                 display: grid;
                 grid-template-columns: 1fr;
-                gap: 16px;
             }
-            
+
             .mobile-product-card {
-                display: flex;
-            }
-            
-            .mobile-card-body {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .mobile-status-container {
-                grid-column: span 2;
-            }
-        }
-        
-        @media (max-width: 500px) {
-            .mobile-card-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .mobile-card-info {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .mobile-card-body {
-                grid-template-columns: 1fr;
-            }
-            
-            .mobile-status-container {
-                grid-column: 1;
+                margin-bottom: 10px;
             }
         }
 
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.7rem;
+            .mobile-card-header {
+                flex-direction: column;
+                text-align: center;
             }
-            
-            .mobile-image-container {
-                width: 120px;
-                height: 120px;
+
+            .mobile-card-info {
+                width: 100%;
+                text-align: center;
             }
-            
-            .page-info {
-                font-size: 0.9rem;
+
+            .mobile-card-body {
+                grid-template-columns: 1fr;
             }
-            
-            .close {
-                top: 15px;
-                right: 15px;
-                font-size: 35px;
+
+            .modal-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
             }
         }
 
         @media (max-width: 360px) {
-            .modal-btn {
-                padding: 10px 15px;
-                font-size: 0.9rem;
+            .mobile-image-container {
+                width: 100%;
+                height: auto;
+                max-height: 150px;
             }
-            
-            #caption {
-                font-size: 1.1rem;
-                padding: 14px 0;
+
+            .mobile-card-row {
+                padding: 10px;
             }
         }
 
@@ -859,15 +750,20 @@
         .loader-circle {
             width: 50px;
             height: 50px;
-            border: 5px solid rgba(52, 152, 219, 0.2);
-            border-top: 5px solid #3498db;
+            border: 5px solid rgba(212, 175, 55, 0.2);
+            border-top: 5px solid #d4af37;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* 错误提示 */
@@ -878,18 +774,18 @@
             font-weight: 500;
             font-size: 1.2rem;
         }
-        
+
         /* 平滑滚动 */
         html {
             scroll-behavior: smooth;
         }
-        
+
         /* 触摸手势提示 */
         .touch-hint {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: white;
             padding: 10px 15px;
             border-radius: 50px;
@@ -898,61 +794,80 @@
             z-index: 1000;
             animation: pulse 2s infinite;
         }
-        
+
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(212, 175, 55, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+
+        /* 图片加载状态 */
+        .image-container.loading::before,
+        .mobile-image-container.loading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 10px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
         }
     </style>
+    <script src="Jewdata.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <header>
-            <h1><i class="fas fa-search-plus"></i> 商品展示表格</h1>
-            <div class="subtitle">移动优化版 - 点击图片查看大图</div>
-        </header>
 
-        <section class="dashboard">
+        <main class="dashboard" aria-label="珠宝设计展示仪表板">
             <div class="dashboard-header">
-                <h2><i class="fas fa-images"></i> 商品库存列表</h2>
+                <div class="dashboard-title">珠宝饰品AI设计稿展示系统</div>
                 <div class="controls">
                     <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" id="searchInput" placeholder="搜索商品...">
-                    </div>
-                    <div class="items-per-page">
-                        <label for="itemsPerPage">每页显示：</label>
-                        <select id="itemsPerPage">
-                            <option value="5">5 条</option>
-                            <option value="10" selected>10 条</option>
-                            <option value="20">20 条</option>
-                            <option value="50">50 条</option>
-                        </select>
+                        <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                        <input type="text" id="searchInput" placeholder="搜索设计名称、类别..." aria-label="搜索设计作品">
                     </div>
                 </div>
             </div>
 
             <!-- 桌面端表格视图 -->
             <div class="table-container">
-                <table id="productTable">
-                    <thead>
-                        <tr>
-                            <th data-sort="id">ID <i class="fas fa-sort"></i></th>
-                            <th>产品图片</th>
-                            <th data-sort="name">产品名称 <i class="fas fa-sort"></i></th>
-                            <th data-sort="category">类别 <i class="fas fa-sort"></i></th>
-                            <th data-sort="price">价格 <i class="fas fa-sort"></i></th>
-                            <th data-sort="quantity">库存 <i class="fas fa-sort"></i></th>
-                            <th data-sort="status">状态 <i class="fas fa-sort"></i></th>
+                <table id="productTable" role="grid" aria-describedby="产品设计信息表格">
+                    <thead role="rowgroup">
+                        <tr role="row">
+                            <th scope="col" role="columnheader" data-sort="id">ID</th>
+                            <th scope="col" role="columnheader">设计图像</th>
+                            <th scope="col" role="columnheader" data-sort="name">设计名称</th>
+                            <th scope="col" role="columnheader" data-sort="category">类别</th>
+                            <th scope="col" role="columnheader" data-sort="material">材质</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
+                    <tbody id="tableBody" role="rowgroup">
                         <!-- 数据加载前显示加载指示器 -->
-                        <tr>
-                            <td colspan="7">
-                                <div class="loader">
+                        <tr role="row">
+                            <td role="cell" colspan="5">
+                                <div class="loader" role="alert" aria-label="数据加载中">
                                     <div class="loader-circle"></div>
                                 </div>
                             </td>
@@ -960,154 +875,74 @@
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- 移动端卡片视图 -->
-            <div class="mobile-product-list" id="mobileProductList"></div>
+            <div class="mobile-product-list" id="mobileProductList" role="region" aria-label="移动端设计卡片视图"></div>
 
             <div class="pagination">
-                <button id="firstPage" title="首页"><i class="fas fa-step-backward"></i></button>
-                <button id="prevPage" title="上一页"><i class="fas fa-chevron-left"></i></button>
-                <!-- Page numbers will be generated here -->
-                <button id="nextPage" title="下一页"><i class="fas fa-chevron-right"></i></button>
-                <button id="lastPage" title="末页"><i class="fas fa-step-forward"></i></button>
+                <button id="firstPage" title="首页" aria-label="跳转到首页">
+                    <i class="fas fa-step-backward" aria-hidden="true"></i>
+                </button>
+                <button id="prevPage" title="上一页" aria-label="上一页">
+                    <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                </button>
+                <!-- 页面数字将在这里生成 -->
+                <button id="nextPage" title="下一页" aria-label="下一页">
+                    <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                </button>
+                <button id="lastPage" title="末页" aria-label="跳转到末页">
+                    <i class="fas fa-step-forward" aria-hidden="true"></i>
+                </button>
 
                 <div class="page-info">
                     <span id="startRow">1</span> - <span id="endRow">10</span> 条，共 <span id="totalRows">0</span> 条记录
                 </div>
             </div>
-        </section>
+        </main>
     </div>
 
     <!-- 图片模态框 -->
-    <div id="imageModal">
-        <span class="close">&times;</span>
-        <button class="modal-nav" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
-        <button class="modal-nav" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+    <div id="imageModal" role="dialog" aria-modal="true" aria-labelledby="modalCaption">
+        <span class="close" role="button" aria-label="关闭图片">&times;</span>
+        <button class="modal-nav" id="prevBtn" aria-label="上一张图片">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav" id="nextBtn" aria-label="下一张图片">
+            <i class="fas fa-chevron-right"></i>
+        </button>
 
         <div class="modal-wrapper">
             <div class="modal-content-container">
-                <img class="modal-content" id="modalImage" src="" alt="">
-                <div id="caption">图片加载中...</div>
+                <img class="modal-content" id="modalImage" src="" alt="放大查看设计图像" role="img">
+                <div id="caption">设计图详情...</div>
                 <div class="modal-controls">
-                    <button class="modal-btn" id="zoomIn"><i class="fas fa-search-plus"></i> 放大</button>
-                    <button class="modal-btn" id="zoomOut"><i class="fas fa-search-minus"></i> 缩小</button>
-                    <button class="modal-btn" id="rotateBtn"><i class="fas fa-sync-alt"></i> 旋转</button>
-                    <button class="modal-btn" id="resetBtn"><i class="fas fa-redo"></i> 重置</button>
+                    <button class="modal-btn" id="zoomIn" aria-label="放大图片">
+                        <i class="fas fa-search-plus"></i> 放大
+                    </button>
+                    <button class="modal-btn" id="zoomOut" aria-label="缩小图片">
+                        <i class="fas fa-search-minus"></i> 缩小
+                    </button>
+                    <button class="modal-btn" id="rotateBtn" aria-label="旋转图片">
+                        旋转
+                    </button>
+                    <button class="modal-btn" id="resetBtn" aria-label="重置图片">
+                        <i class="fas fa-redo"></i> 重置
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="touch-hint" id="touchHint">← 左右滑动切换图片 →</div>
 
+
+
     <script>
-        // 模拟数据
-        const products = [
-            {
-                id: 101, name: "智能手机 X1", category: "手机", price: 2999, quantity: 45, status: "available",
-                image: "https://img.freepik.com/free-photo/new-smartphone-black-background-mock-up_53876-97389.jpg?w=900",
-                description: "高端旗舰手机，搭载最新处理器和AMOLED屏幕，支持5G网络"
-            },
-            {
-                id: 102, name: "笔记本电脑 Pro", category: "电脑", price: 7999, quantity: 18, status: "available",
-                image: "https://img.freepik.com/free-photo/laptop-mockup-concept_23-2148621157.jpg?w=900",
-                description: "轻薄设计，高性能处理器，超长续航时间，办公娱乐两相宜"
-            },
-            {
-                id: 103, name: "蓝牙耳机 Air", category: "耳机", price: 899, quantity: 0, status: "out-of-stock",
-                image: "https://img.freepik.com/free-photo/wireless-earbuds_53876-96805.jpg?w=900",
-                description: "真无线设计，主动降噪功能，高保真音质，24小时续航"
-            },
-            {
-                id: 104, name: "智能手表 3", category: "可穿戴", price: 1299, quantity: 32, status: "available",
-                image: "https://img.freepik.com/free-photo/smart-watch_53876-94783.jpg?w=900",
-                description: "全面健康监测，50米防水，支持运动模式识别，30天待机"
-            },
-            {
-                id: 105, name: "平板电脑 Lite", category: "平板", price: 2299, quantity: 24, status: "available",
-                image: "https://img.freepik.com/free-photo/white-tablet-screen-mock-up-concept_53876-89852.jpg?w=900",
-                description: "10英寸高分辨率屏幕，四扬声器环绕音效，超大电池容量"
-            },
-            {
-                id: 106, name: "游戏主机 Elite", category: "游戏", price: 4599, quantity: 8, status: "available",
-                image: "https://img.freepik.com/free-photo/gaming-console_53876-97308.jpg?w=900",
-                description: "支持4K分辨率，光线追踪技术，1TB固态硬盘，超强性能"
-            },
-            {
-                id: 107, name: "数码相机 Pro", category: "相机", price: 5899, quantity: 12, status: "available",
-                image: "https://img.freepik.com/free-photo/digital-camera_1409-8890.jpg?w=900",
-                description: "2400万像素，4K视频拍摄，五轴防抖，专业级摄影体验"
-            },
-            {
-                id: 108, name: "无线鼠标", category: "配件", price: 159, quantity: 76, status: "available",
-                image: "https://img.freepik.com/free-psd/wireless-computer-mouse-isolated-transparent-background_191095-9015.jpg?w=900",
-                description: "人体工学设计，2.4GHz无线连接，可编程按键，超长续航"
-            },
-            {
-                id: 109, name: "机械键盘 RGB", category: "配件", price: 599, quantity: 21, status: "available",
-                image: "https://img.freepik.com/free-photo/keyboard-computer-peripherals-close-up-view_1418-1480.jpg?w=900",
-                description: "Cherry MX轴体，RGB背光，全键无冲，双色注塑键帽"
-            },
-            {
-                id: 110, name: "4K显示器", category: "显示器", price: 2899, quantity: 14, status: "available",
-                image: "https://img.freepik.com/free-photo/wide-computer-monitor-displaying-technology-interface_53876-94884.jpg?w=900",
-                description: "27英寸4K HDR显示屏，99% sRGB色域，多接口支持"
-            },
-            {
-                id: 111, name: "路由器 AX6000", category: "网络", price: 899, quantity: 9, status: "available",
-                image: "https://img.freepik.com/free-psd/wireless-router-mock-up_1310-1528.jpg?w=900",
-                description: "WiFi 6技术，8数据流设计，OFDMA和MU-MIMO技术"
-            },
-            {
-                id: 112, name: "外置硬盘 2TB", category: "存储", price: 699, quantity: 27, status: "available",
-                image: "https://img.freepik.com/free-photo/external-hard-disk_53876-97381.jpg?w=900",
-                description: "USB 3.2接口，超快传输速度，防震设计，3年质保"
-            },
-            {
-                id: 113, name: "便携投影仪", category: "显示", price: 1899, quantity: 0, status: "out-of-stock",
-                image: "https://img.freepik.com/free-psd/portable-projector-mock-up_1310-1964.jpg?w=900",
-                description: "微型设计，支持1080P，内置音响，1000流明亮度"
-            },
-            {
-                id: 114, name: "蓝牙音箱", category: "音频", price: 399, quantity: 41, status: "available",
-                image: "https://img.freepik.com/free-photo/bluetooth-speaker_53876-89035.jpg?w=900",
-                description: "360°环绕音效，IPX7防水，20小时续航，支持立体声配对"
-            },
-            {
-                id: 115, name: "电子阅读器", category: "阅读", price: 999, quantity: 17, status: "available",
-                image: "https://img.freepik.com/free-photo/e-reader_53876-94814.jpg?w=900",
-                description: "7英寸电子墨水屏，32GB存储，24级背光调节，轻至180g"
-            },
-            {
-                id: 116, name: "游戏手柄", category: "游戏", price: 499, quantity: 6, status: "available",
-                image: "https://img.freepik.com/free-photo/gaming-gear-joystick_53876-94826.jpg?w=900",
-                description: "无线连接，震动反馈，可编程按键，人体工学设计"
-            },
-            {
-                id: 117, name: "VR眼镜", category: "可穿戴", price: 2799, quantity: 3, status: "available",
-                image: "https://img.freepik.com/free-psd/virtual-reality-headset-mock-up_1310-1779.jpg?w=900",
-                description: "6DOF追踪，110°视场角，高分辨率显示屏，佩戴舒适"
-            },
-            {
-                id: 118, name: "无人机 Mini", category: "摄影", price: 3499, quantity: 7, status: "available",
-                image: "https://img.freepik.com/free-photo/drone-with-camera_53876-97388.jpg?w=900",
-                description: "4K高清摄影，3轴云台稳定，31分钟续航，智能飞行模式"
-            },
-            {
-                id: 119, name: "打印机 Pro", category: "办公", price: 1899, quantity: 15, status: "available",
-                image: "https://img.freepik.com/free-photo/printer_1203-8501.jpg?w=900",
-                description: "无线打印，自动双面，彩色喷墨，支持多种纸张类型"
-            },
-            {
-                id: 120, name: "扫描仪", category: "办公", price: 1099, quantity: 0, status: "out-of-stock",
-                image: "https://img.freepik.com/free-psd/flat-scanner-mock-up_23-2148932946.jpg?w=900",
-                description: "高分辨率扫描，一键操作，自动文档进纸，OCR文字识别"
-            }
-        ];
+        // 每页显示数量固定为10条
+        const itemsPerPage = 10;
 
         // 当前状态
         let currentPage = 1;
-        let itemsPerPage = parseInt(document.getElementById('itemsPerPage').value);
         let sortField = 'id';
         let sortDirection = 'asc';
         let currentProducts = [...products];
@@ -1116,7 +951,6 @@
         // DOM元素
         const tableBody = document.getElementById('tableBody');
         const mobileProductList = document.getElementById('mobileProductList');
-        const itemsPerPageSelect = document.getElementById('itemsPerPage');
         const startRowEl = document.getElementById('startRow');
         const endRowEl = document.getElementById('endRow');
         const totalRowsEl = document.getElementById('totalRows');
@@ -1135,7 +969,7 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const touchHint = document.getElementById('touchHint');
-        
+
         // 图片操作状态
         let currentScale = 1;
         let currentRotation = 0;
@@ -1148,17 +982,11 @@
         });
 
         function setupEventListeners() {
-            // 每页显示数量变化
-            itemsPerPageSelect.addEventListener('change', function () {
-                itemsPerPage = parseInt(this.value);
-                currentPage = 1;
-                renderTable();
-            });
-
             // 分页按钮
             document.getElementById('firstPage').addEventListener('click', function () {
                 currentPage = 1;
                 renderTable();
+                document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
             });
 
             document.getElementById('prevPage').addEventListener('click', function () {
@@ -1177,7 +1005,7 @@
             });
 
             document.getElementById('lastPage').addEventListener('click', function () {
-                currentPage = Math.ceil(currentProducts.length / itemsPerPage);
+                currentPage = Math.ceil(currentProducts.length / items极PerPage);
                 renderTable();
             });
 
@@ -1192,7 +1020,7 @@
                         return (
                             product.name.toLowerCase().includes(searchTerm) ||
                             product.category.toLowerCase().includes(searchTerm) ||
-                            product.status.toLowerCase().includes(searchTerm) ||
+                            product.material.toLowerCase().includes(searchTerm) ||
                             product.id.toString().includes(searchTerm) ||
                             product.description.toLowerCase().includes(searchTerm)
                         );
@@ -1309,19 +1137,24 @@
                             updateImageTransform();
                         }
                     }
+                    // R键旋转
+                    else if (e.key.toLowerCase() === 'r') {
+                        currentRotation += 90;
+                        updateImageTransform();
+                    }
                 }
             });
-            
+
             // 触摸手势（移动端）
-            modalImg.addEventListener('touchstart', function(e) {
+            modalImg.addEventListener('touchstart', function (e) {
                 touchStartX = e.changedTouches[0].screenX;
                 touchHint.style.display = 'none';
             }, { passive: true });
 
-            modalImg.addEventListener('touchend', function(e) {
+            modalImg.addEventListener('touchend', function (e) {
                 const touchEndX = e.changedTouches[0].screenX;
                 const diffX = touchStartX - touchEndX;
-                
+
                 // 滑动距离超过50px才触发
                 if (Math.abs(diffX) > 50) {
                     if (diffX > 0) {
@@ -1331,13 +1164,57 @@
                     }
                 }
             }, { passive: true });
+
+            // 双指缩放
+            modalImg.addEventListener('touchmove', function (e) {
+                if (e.touches.length === 2) {
+                    e.preventDefault();
+
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+
+                    // 计算当前距离
+                    const currentDistance = Math.sqrt(
+                        Math.pow(touch2.clientX - touch1.clientX, 2) +
+                        Math.pow(touch2.clientY - touch1.clientY, 2)
+                    );
+
+                    // 初始距离存储在第一次触摸事件
+                    if (!this.initialDistance) {
+                        this.initialDistance = currentDistance;
+                        this.initialScale = currentScale;
+                        return;
+                    }
+
+                    // 计算比例变化
+                    const scaleFactor = currentDistance / this.initialDistance;
+                    currentScale = Math.max(0.5, Math.min(3, this.initialScale * scaleFactor));
+                    updateImageTransform();
+                }
+            }, { passive: false });
+
+            // 移动端双击放大
+            let lastTap = 0;
+            modalImg.addEventListener('touchend', function (e) {
+                const now = Date.now();
+                const DOUBLE_TAP_DELAY = 300;
+
+                if (lastTap && (now - lastTap) < DOUBLE_TAP_DELAY) {
+                    // 双击事件
+                    currentScale = currentScale === 1 ? 2 : 1;
+                    updateImageTransform();
+                    lastTap = 0;
+                } else {
+                    lastTap = now;
+                }
+            });
         }
 
         // 设置图片点击事件
         function setupImageClickEvents() {
             // 桌面端图片点击事件
             document.querySelectorAll('.image-container, .magnify-icon').forEach(el => {
-                el.addEventListener('click', function(e) {
+                el.addEventListener('click', function (e) {
                     const row = this.closest('tr');
                     const productId = row.cells[0].textContent;
                     const product = products.find(p => p.id === parseInt(productId));
@@ -1346,10 +1223,10 @@
                     }
                 });
             });
-            
+
             // 移动端图片点击事件
             document.querySelectorAll('.mobile-image-container, .mobile-magnify-icon').forEach(el => {
-                el.addEventListener('click', function(e) {
+                el.addEventListener('click', function (e) {
                     const card = this.closest('.mobile-product-card');
                     const productId = card.querySelector('.mobile-card-id').textContent.split(': ')[1];
                     const product = products.find(p => p.id === parseInt(productId));
@@ -1361,18 +1238,21 @@
         }
 
         function openImageModal(product) {
-            // 图片懒加载
-            const placeholderImg = 'https://via.placeholder.com/600x400/3498db/ffffff?text=Loading...';
-            modalImg.src = placeholderImg;
-            
+            modalCaption.textContent = `加载中...`;
+
             // 加载实际图片
             const imgLoader = new Image();
             imgLoader.src = product.image;
-            imgLoader.onload = function() {
+            imgLoader.onload = function () {
                 modalImg.src = product.image;
+                modalCaption.textContent = `${product.name} - ${product.category}`;
             };
-            
-            modalCaption.textContent = `${product.name} - ${product.category}`;
+
+            imgLoader.onerror = function () {
+                modalImg.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect width="600" height="400" fill="%23f0f0f0"/><text x="300" y="200" text-anchor="middle" fill="%23999" font-family="Arial" font-size="20">图片加载失败</text></svg>';
+                modalCaption.textContent = `图片加载失败: ${product.name}`;
+            };
+
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
@@ -1383,7 +1263,7 @@
 
             // 查找当前产品在列表中的位置
             currentImageIndex = products.findIndex(p => p.id === product.id);
-            
+
             // 移动端显示提示
             if ('ontouchstart' in window) {
                 touchHint.style.display = 'block';
@@ -1404,13 +1284,7 @@
             }
 
             const product = products[currentImageIndex];
-            modalImg.src = product.image;
-            modalCaption.textContent = `${product.name} - ${product.category}`;
-
-            // 重置缩放和旋转
-            currentScale = 1;
-            currentRotation = 0;
-            updateImageTransform();
+            openImageModal(product);
         }
 
         function closeImageModal() {
@@ -1428,7 +1302,7 @@
             const sortedProducts = [...currentProducts].sort((a, b) => {
                 let valueA, valueB;
 
-                if (sortField === 'name' || sortField === 'category' || sortField === 'status') {
+                if (sortField === 'name' || sortField === 'category' || sortField === 'material') {
                     valueA = a[sortField].toLowerCase();
                     valueB = b[sortField].toLowerCase();
                 } else {
@@ -1463,8 +1337,8 @@
             mobileProductList.innerHTML = '';
 
             if (paginatedProducts.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #7f8c8d;">没有找到匹配的产品数据</td></tr>`;
-                mobileProductList.innerHTML = `<div class="mobile-product-card" style="text-align: center; padding: 30px; color: #7f8c8d;">没有找到匹配的产品数据</div>`;
+                tableBody.innerHTML = `<tr role="row"><td role="cell" colspan="5" style="text-align: center; padding: 40px; color: #7f8c8d;">没有找到匹配的设计数据</td></tr>`;
+                mobileProductList.innerHTML = `<div class="mobile-product-card" role="article" style="text-align: center; padding: 30px; color: #7f8c8d;">没有找到匹配的设计数据</div>`;
                 renderPagination(0);
                 return;
             }
@@ -1472,25 +1346,24 @@
             // 渲染桌面表格
             paginatedProducts.forEach(product => {
                 const row = document.createElement('tr');
+                row.setAttribute('role', 'row');
 
                 row.innerHTML = `
-                    <td>${product.id}</td>
-                    <td>
-                        <div class="image-container">
-                            <img src="${product.image}" alt="${product.name}" class="product-img">
-                            <div class="magnify-icon">
+                    <td role="cell">${product.id}</td>
+                    <td role="cell">
+                        <div class="image-container loading" tabindex="0" role="button" aria-label="查看${product.name}大图">
+                            <img src="${product.image}" alt="${product.name}" class="product-img" onload="this.parentNode.classList.remove('loading')" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"120\" height=\"120\" viewBox=\"0 0 120 120\"><rect width=\"120\" height=\"120\" fill=\"%23f0f0f0\"/><text x=\"60\" y=\"60\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"Arial\" font-size=\"12\">图片加载失败</text></svg>'">
+                            <div class="magnify-icon" tabindex="0" role="button" aria-label="放大查看${product.name}">
                                 <i class="fas fa-search-plus"></i>
                             </div>
                         </div>
                     </td>
-                    <td>
+                    <td role="cell">
                         <strong>${product.name}</strong>
-                        <div class="product-detail">${product.description.substring(0, 40)}...</div>
+                        <div class="product-detail">${product.description}</div>
                     </td>
-                    <td>${product.category}</td>
-                    <td><span class="product-highlight">¥${product.price.toLocaleString()}</span></td>
-                    <td>${product.quantity}</td>
-                    <td><span class="status ${product.status}">${product.status === 'available' ? '有货' : '缺货'}</span></td>
+                    <td role="cell">${product.category}</td>
+                    <td role="cell"><span class="material-badge">${product.material}</span></td>
                 `;
 
                 tableBody.appendChild(row);
@@ -1500,12 +1373,13 @@
             paginatedProducts.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'mobile-product-card';
-                
+                card.setAttribute('role', 'article');
+
                 card.innerHTML = `
                     <div class="mobile-card-header">
-                        <div class="mobile-image-container">
-                            <img src="${product.image}" alt="${product.name}">
-                            <div class="mobile-magnify-icon">
+                        <div class="mobile-image-container loading" tabindex="0" role="button" aria-label="查看${product.name}大图">
+                            <img src="${product.image}" alt="${product.name}" onload="this.parentNode.classList.remove('loading')" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect width=\"100\" height=\"100\" fill=\"%23f0f0f0\"/><text x=\"50\" y=\"50\" text-anchor=\"middle\" fill=\"%23999\" font-family=\"Arial\" font-size=\"10\">图片加载失败</text></svg>'">
+                            <div class="mobile-magnify-icon" tabindex="0" role="button" aria-label="放大查看${product.name}">
                                 <i class="fas fa-search-plus"></i>
                             </div>
                         </div>
@@ -1515,21 +1389,13 @@
                         </div>
                     </div>
                     <div class="mobile-card-body">
-                        <div class="mobile-card-row">
+                        <div class="mobile-card-row" role="listitem">
                             <div class="mobile-card-label"><i class="fas fa-tag"></i> 类别</div>
                             <div class="mobile-card-value">${product.category}</div>
                         </div>
-                        <div class="mobile-card-row">
-                            <div class="mobile-card-label"><i class="fas fa-dollar-sign"></i> 价格</div>
-                            <div class="mobile-card-value">¥${product.price.toLocaleString()}</div>
-                        </div>
-                        <div class="mobile-card-row">
-                            <div class="mobile-card-label"><i class="fas fa-box"></i> 库存</div>
-                            <div class="mobile-card-value">${product.quantity}</div>
-                        </div>
-                        <div class="mobile-status-container">
-                            <div class="mobile-status-label"><i class="fas fa-info-circle"></i> 状态</div>
-                            <span class="status ${product.status}">${product.status === 'available' ? '有货' : '缺货'}</span>
+                        <div class="mobile-card-row" role="listitem">
+                            <div class="mobile-card-label"><i class="fas fa-gem"></i> 材质</div>
+                            <div class="mobile-card-value">${product.material}</div>
                         </div>
                     </div>
                     <div class="mobile-card-description">
@@ -1587,20 +1453,23 @@
 
             // 创建页码按钮
             for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
+                const pageBtn = document.createElement('div');
                 pageBtn.className = 'page-number';
                 pageBtn.textContent = i;
                 pageBtn.dataset.page = i;
+                pageBtn.setAttribute('aria-label', `第 ${i} 页`);
+                pageBtn.setAttribute('role', 'button');
 
                 if (i === currentPage) {
                     pageBtn.classList.add('active');
+                    pageBtn.setAttribute('aria-current', 'page');
                 }
 
                 pageBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     currentPage = parseInt(this.dataset.page);
                     renderTable();
-                    
+
                     // 平滑滚动到顶部
                     document.querySelector('.container').scrollIntoView({ behavior: 'smooth' });
                 });
