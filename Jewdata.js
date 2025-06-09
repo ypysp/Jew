@@ -2,7 +2,7 @@
 const products = [
     {
         id: 201, name: "翡翠蝴蝶胸针1", category: "胸针", material: "翡翠/钻石",
-        image: "https://images.unsplash.com/photo-1591955506264-3f5a6834570a?q=80",
+        image: "a11.jpg",
         description: "AI设计的天然翡翠蝴蝶造型胸针，镶嵌钻石翅膀"
     },
     {
